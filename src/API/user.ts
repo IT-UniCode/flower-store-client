@@ -1,22 +1,17 @@
 import api from './config';
 
-export const getUsers = () => api.get('/users/');
+export const getUsers = () => api.get('/user/');
 
-export const addNewUser = (body:any) => api.post('/users/signup', {
+export const getUserById = (userId: string) => api.get(`/user/${userId}`);
+
+export const signup = (body:any) => api.post('/user/signup', {
   ...body,
 })
 
-
-
-
-export const deleteUsers = (userId: number) => api.delete(`/delete/${userId}`);
-
-export const login = (body: any) => api.post('/login', {
+export const signin = (body: any) => api.post('/user/signin', {
   ...body,
 })
 
-export const logout = (body: any) => api.put('/logout', {
+export const updateUserBasket = (userId: string,  body: any) => api.post(`/user/update-basket/${userId}`, {
   ...body,
 })
-
-export const getUserInfo = (userId: number) => api.get(`/user-info/${userId}`);

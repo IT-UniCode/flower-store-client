@@ -1,9 +1,47 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+
+import { AppContext } from "../../Context";
+import { getUserById } from "../../API/user";
 
 import useStyles from "./style";
 
 const Account = () => {
   const classes = useStyles();
+  const { auth, setAuth } = useContext(AppContext);
+  const [user, setUser] = useState<IUser>({
+    name: "",
+    surname: "",
+    lastname: "",
+    phone: "",
+    address: "",
+    email: "",
+    password: "",
+    checkPass: "",
+    basketId: '',
+  });
+
+  useEffect(() => {
+    getUserById(localStorage.userId).then((res) => {
+      console.log(res);
+      
+      setUser({
+        name: res.data.name,
+        surname: res.data.surname,
+        lastname: res.data.lastname,
+        phone: res.data.phone,
+        address: res.data.address,
+        email: res.data.email,
+        password: "",
+        checkPass: "",
+        basketId: '',
+      });
+    });
+  }, []);
+
+  const logout = () => {
+    localStorage.clear();
+    setAuth(false);
+  };
 
   return (
     <div className={classes.root}>
@@ -13,15 +51,15 @@ const Account = () => {
         <div className="userData_items">
           <div className="userData_item">
             <p className="userData_item-title">Фамилия</p>
-            <p>Сапейко</p>
+            <p>{user.surname}</p>
           </div>
           <div className="userData_item">
             <p className="userData_item-title">Имя</p>
-            <p>Максим</p>
+            <p>{user.name}</p>
           </div>
           <div className="userData_item">
             <p className="userData_item-title">Отчество</p>
-            <p>Олександрович</p>
+            <p>{user.lastname}</p>
           </div>
         </div>
       </div>
@@ -31,11 +69,11 @@ const Account = () => {
         <div className="userData_items">
           <div className="userData_item">
             <p className="userData_item-title">Телефон</p>
-            <p>+380832342367</p>
+            <p>{user.phone}</p>
           </div>
           <div className="userData_item">
             <p className="userData_item-title">Email</p>
-            <p>maks.ewfa@ewf.efwe</p>
+            <p>{user.email}</p>
           </div>
           <div className="userData_item" />
         </div>
@@ -44,9 +82,10 @@ const Account = () => {
       <div className="userData">
         <h3>Адрес доставки</h3>
         <div className="userData_items">
-            <p>Черкасская обл., Черкассы р-н., Черкассы, Благовестная ул., д.123, кв.7</p>
+          <p>{user.address}</p>
         </div>
       </div>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 };

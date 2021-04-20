@@ -48,11 +48,6 @@ const CustomHeader = () => {
               О нас
             </Link>
           </Menu.Item>
-          {/* <Menu.Item key='/' className="menu_item_right menu_item_contact">
-            <Link to="/" className="menu_link">
-              Связаться
-            </Link>
-          </Menu.Item> */}
           <Menu.Item key="/cart" className="menu_item_right menu_item_cart">
             <Link to="/cart" className="menu_link">
               Корзина

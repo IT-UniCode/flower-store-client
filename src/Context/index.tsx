@@ -10,7 +10,7 @@ interface AppProviderProps {
 };
 
 const initialState = {
-  auth: null,
+  auth: false,
   setAuth: (v: boolean | null) => v,
 };
 

@@ -2,8 +2,8 @@ import React from "react";
 import { Layout } from "antd";
 import { BrowserRouter as Router } from "react-router-dom";
 
-import CustomHeader from "./Components/CustomHeader";
 import Routes from "./Routes";
+import CustomHeader from "./Components/CustomHeader";
 import CustomFooter from "./Components/CustomFooter";
 import AppProvider from './Context';
 

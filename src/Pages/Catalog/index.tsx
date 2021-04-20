@@ -2,25 +2,29 @@ import React, { useEffect, useState } from "react";
 import { Card, Button } from "antd";
 
 import { getGoodsList } from "../../API/goods";
-
-import CategoryMenu from '../../Components/CategoryMenu';
+import { createBasket, getBasketByUserId } from "../../API/basket";
+import CategoryMenu from "../../Components/CategoryMenu";
 
 import useStyles from "./style";
-
-interface IGoods {
-  name: string;
-  price: number;
-  description: string;
-  existence: boolean;
-  type: string[];
-  tag: string[];
-  productImage: string;
-}
 
 const Catalog = () => {
   const classes = useStyles();
 
   const [goods, setGoods] = useState<IGoods[]>([]);
+
+  const buy = () => {
+    getBasketByUserId(localStorage.userId)
+      .then(basket => {
+        console.log(basket);
+        
+        
+      })
+      .catch(() => {
+        createBasket(localStorage.userId)
+          .then(() => console.log("Корзина создана"))
+          .catch((error) => console.log(error));
+      });
+  };
 
   useEffect(() => {
     getGoodsList().then((res) => {
@@ -32,9 +36,9 @@ const Catalog = () => {
     <div className={classes.root}>
       <h2 className="page_title">Каталог букетов</h2>
 
-      <div className='catalogue_wrapper'>
+      <div className="catalogue_wrapper">
         <CategoryMenu />
-        
+
         <div className="goods_items">
           {goods.map((item, index) => (
             <Card key={index}>
@@ -47,7 +51,9 @@ const Catalog = () => {
               </div>
               <h3 className="goods_card-title">{item.name}</h3>
               <p className="goods_card-desc">{item.description}</p>
-              <Button className="goods_card-btn">Заказать</Button>
+              <Button className="goods_card-btn" onClick={buy}>
+                Заказать
+              </Button>
             </Card>
           ))}
         </div>

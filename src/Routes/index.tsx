@@ -44,7 +44,7 @@ const ROUTES: IRoutes[] = [
     path: "/cart",
     exact: false,
     componnent: <Cart />,
-    private: false,
+    private: true,
   },
   {
     path: "/account",
@@ -53,13 +53,13 @@ const ROUTES: IRoutes[] = [
     private: true,
   },
   {
-    path: "/sign-up",
+    path: "/signup",
     exact: false,
     componnent: <SignUp />,
     private: false,
   },
   {
-    path: "/sign-in",
+    path: "/signin",
     exact: false,
     componnent: <SignIn />,
     private: false,

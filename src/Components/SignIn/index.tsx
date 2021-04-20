@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { Form, Input, Button } from "antd";
+import { Link, useHistory, withRouter } from "react-router-dom";
 
-import { MailOutlined , LockOutlined } from "@ant-design/icons";
+import { signin } from "../../API/user";
+import { AppContext } from "../../Context";
+import jwtDecode from 'jwt-decode';
 
+import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import useStyles from "./style";
-import { Link } from "react-router-dom";
+interface IUser {
+  email: string;
+  password: string;
+}
 
 const SignIn = () => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const { auth, setAuth } = useContext(AppContext);
+  const [user, setUser] = useState<IUser>({
+    email: "",
+    password: "",
+  });
+
+  const login = () => {
+    signin(user)
+      .then((res) => {
+        const decode: any = jwtDecode(res.data.token);
+        localStorage.setItem("jwt", res.data.token);
+        localStorage.setItem("userId", decode._id);
+        
+        setAuth(true);
+        history.push('/account')
+      })
+      .catch((error) => console.log(`Error: ${error}`));
+  };
 
   return (
     <div className={classes.root}>
@@ -16,23 +43,37 @@ const SignIn = () => {
           <Form.Item
             name={["user", "email"]}
             label="Email"
-            rules={[{ type: "email", required: true, message: 'Please input email!' }]}
+            rules={[
+              {
+                type: "email",
+                required: true,
+                message: "Please input correct email!",
+              },
+            ]}
           >
-            <Input prefix={<MailOutlined  className="site-form-item-icon" />} className="form_item-input" placeholder="Email" />
+            <Input
+              prefix={<MailOutlined className="site-form-item-icon" />}
+              className="form_item-input"
+              placeholder="Email"
+              onChange={(e) =>
+                setUser((prev) => ({ ...prev, email: e.target.value }))
+              }
+            />
           </Form.Item>
           <Form.Item>
             <Form.Item
               name={["user", "password"]}
               label="Пароль"
-              rules={[
-                { required: true, message: "Please input password!" },
-              ]}
+              rules={[{ required: true, message: "Please input password!" }]}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="Пароль"
                 className="form_item-input"
+                onChange={(e) =>
+                  setUser((prev) => ({ ...prev, password: e.target.value }))
+                }
               />
             </Form.Item>
           </Form.Item>
@@ -41,13 +82,14 @@ const SignIn = () => {
               type="primary"
               htmlType="submit"
               className="signInForm_signInBtn"
+              onClick={login}
             >
               Войти
             </Button>
             <div className="signInForm_btns_isSignIn">
               <p>Ещё нет аккаунта?</p>
               <Button type="primary">
-                <Link to='/sign-up'>Регистрация</Link>
+                <Link to="/signup">Регистрация</Link>
               </Button>
             </div>
           </div>
@@ -57,4 +99,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default withRouter(SignIn);

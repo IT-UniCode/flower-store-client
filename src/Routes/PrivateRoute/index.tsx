@@ -12,15 +12,6 @@ interface PrivateRouteProps {
 const PrivateRoute: FC<PrivateRouteProps> = ({ children, ...props }) => {
   const { auth, setAuth } = useContext(AppContext);
 
-  useEffect(() => {
-    // getUserInfo(28).then((res) => console.log(res.data));
-    
-    // login({ email: 'maks@gmail.com', pass: 'maks2000' })
-    //   .then((res) => res.data)
-    //   .catch((res) => res);
-    setAuth(false);
-  }, [setAuth]);
-
   if (auth === null) {
     return <div>Loading...</div>;
   }
@@ -28,7 +19,7 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ children, ...props }) => {
   if (auth) {
     return <Route {...props}>{children}</Route>;
   }
-  return <Redirect to="/sign-in" />;
+  return <Redirect to="/signin" />;
 };
 
 export default PrivateRoute;

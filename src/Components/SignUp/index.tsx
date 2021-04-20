@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { FC, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 
-import { addNewUser } from "../../API/user";
+import { signup } from "../../API/user";
 
 import {
   UserOutlined,
@@ -14,19 +14,9 @@ import {
 
 import useStyles from "./style";
 
-interface IUser {
-  name: string;
-  surname: string;
-  lastname: string;
-  phone: string;
-  address: string;
-  email: string;
-  password: string;
-  checkPass: string;
-}
-
-const SignUp = () => {
+const SignUp: FC = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   const [user, setUser] = useState<IUser>({
     name: "",
@@ -37,6 +27,7 @@ const SignUp = () => {
     email: "",
     password: "",
     checkPass: "",
+    basketId: "",
   });
 
   const onSubmit = () => {
@@ -48,11 +39,11 @@ const SignUp = () => {
       address: user.address,
       email: user.email,
       password: user.password,
+      basketId: "",
     };
 
-    addNewUser(newUser)
+    signup(newUser)
       .then((res) => {
-        console.log(res.data);
         setUser({
           name: "",
           surname: "",
@@ -62,11 +53,12 @@ const SignUp = () => {
           email: "",
           password: "",
           checkPass: "",
+          basketId: "",
         });
+        history.push("/signin");
       })
       .catch((err) => console.log(`Error: ${err}`));
   };
-  console.log(user);
 
   const formItemsArgs = [
     {
@@ -99,7 +91,7 @@ const SignUp = () => {
       label: "Введите отчество",
       message: "Please input your lastname!",
       prefixComponent: <UserOutlined className="site-form-item-icon" />,
-      placeholder: "Фамилия",
+      placeholder: "Отчество",
       value: user.lastname,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, lastname: value }));
@@ -199,7 +191,7 @@ const SignUp = () => {
             <div className="signUpForm_btns_isSignUp">
               <p>Уже есть аккаунт?</p>
               <Button type="primary">
-                <Link to="/sign-in">Войти</Link>
+                <Link to="/signin">Войти</Link>
               </Button>
             </div>
           </div>
