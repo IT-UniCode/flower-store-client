@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useContext, useEffect } from "react";
+import React, { FC, ReactNode, useContext } from "react";
 import { Redirect, Route } from "react-router-dom";
 
 import { AppContext } from "../../Context";
@@ -10,7 +10,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: FC<PrivateRouteProps> = ({ children, ...props }) => {
-  const { auth, setAuth } = useContext(AppContext);
+  const { auth,  } = useContext(AppContext);
 
   if (auth === null) {
     return <div>Loading...</div>;

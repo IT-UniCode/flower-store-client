@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Card, Button } from "antd";
 
 import { getGoodsList } from "../../API/goods";
-import { createBasket, getBasketByUserId } from "../../API/basket";
+import {
+  createBasket,
+  getBasketByUserId,
+  addGoodsToBasket,
+} from "../../API/basket";
 import CategoryMenu from "../../Components/CategoryMenu";
 
 import useStyles from "./style";
@@ -12,22 +16,29 @@ const Catalog = () => {
 
   const [goods, setGoods] = useState<IGoods[]>([]);
 
-  const buy = () => {
+  const buy = (goodsId: string) => {        
     getBasketByUserId(localStorage.userId)
-      .then(basket => {
-        console.log(basket);
-        
-        
-      })
-      .catch(() => {
-        createBasket(localStorage.userId)
-          .then(() => console.log("Корзина создана"))
+      .then((res) => {
+        if (res.data.length > 0) {
+          addGoodsToBasket(localStorage.userId, goodsId)
+            .then(() => console.log("Товар добавлен в корзину"))
+            .catch((error) => console.log(error));
+        } else {
+          createBasket(localStorage.userId)
+          .then(() => {
+            console.log("Корзина создана");
+            addGoodsToBasket(localStorage.userId, goodsId)
+              .then(() => console.log("Товар добавлен в корзину"))
+              .catch((error) => console.log(error));
+          })
           .catch((error) => console.log(error));
-      });
+        }
+      })
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
-    getGoodsList().then((res) => {
+    getGoodsList().then((res) => {      
       setGoods(res.data);
     });
   }, []);
@@ -51,7 +62,7 @@ const Catalog = () => {
               </div>
               <h3 className="goods_card-title">{item.name}</h3>
               <p className="goods_card-desc">{item.description}</p>
-              <Button className="goods_card-btn" onClick={buy}>
+              <Button className="goods_card-btn" onClick={() => buy(item._id)}>
                 Заказать
               </Button>
             </Card>

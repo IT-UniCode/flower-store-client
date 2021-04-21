@@ -1,8 +1,8 @@
 import { Layout, Menu } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
 
-import { AppContext } from "../../Context";
+// import { AppContext } from "../../Context";
 
 import logo_img from "../../assets/img/poppy-flower.png";
 
@@ -14,7 +14,7 @@ const CustomHeader = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { auth, setAuth } = useContext(AppContext);
+  //const { auth, setAuth } = useContext(AppContext);
   const [path, setPath] = useState(["/"]);
 
   useEffect(() => {

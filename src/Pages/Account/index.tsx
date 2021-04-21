@@ -7,7 +7,7 @@ import useStyles from "./style";
 
 const Account = () => {
   const classes = useStyles();
-  const { auth, setAuth } = useContext(AppContext);
+  const { setAuth } = useContext(AppContext);
   const [user, setUser] = useState<IUser>({
     name: "",
     surname: "",
@@ -22,8 +22,7 @@ const Account = () => {
 
   useEffect(() => {
     getUserById(localStorage.userId).then((res) => {
-      console.log(res);
-      
+            
       setUser({
         name: res.data.name,
         surname: res.data.surname,

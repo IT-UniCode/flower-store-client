@@ -11,6 +11,7 @@ declare interface IUser {
 }
 
 declare interface IGoods {
+  _id: string;
   name: string;
   price: number;
   description: string;

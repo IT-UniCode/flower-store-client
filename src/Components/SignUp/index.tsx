@@ -43,7 +43,7 @@ const SignUp: FC = () => {
     };
 
     signup(newUser)
-      .then((res) => {
+      .then(() => {
         setUser({
           name: "",
           surname: "",
