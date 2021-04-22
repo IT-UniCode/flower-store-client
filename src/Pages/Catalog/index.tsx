@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Card, Button } from "antd";
 
 import { getGoodsList } from "../../API/goods";
@@ -11,12 +11,13 @@ import CategoryMenu from "../../Components/CategoryMenu";
 
 import useStyles from "./style";
 
-const Catalog = () => {
+const Catalog: FC = () => {
   const classes = useStyles();
 
   const [goods, setGoods] = useState<IGoods[]>([]);
+  const [sortItems, setSortItems] = useState<ISortItems>();
 
-  const buy = (goodsId: string) => {        
+  const buy = (goodsId: string) => {
     getBasketByUserId(localStorage.userId)
       .then((res) => {
         if (res.data.length > 0) {
@@ -25,21 +26,42 @@ const Catalog = () => {
             .catch((error) => console.log(error));
         } else {
           createBasket(localStorage.userId)
-          .then(() => {
-            console.log("Корзина создана");
-            addGoodsToBasket(localStorage.userId, goodsId)
-              .then(() => console.log("Товар добавлен в корзину"))
-              .catch((error) => console.log(error));
-          })
-          .catch((error) => console.log(error));
+            .then(() => {
+              console.log("Корзина создана");
+              addGoodsToBasket(localStorage.userId, goodsId)
+                .then(() => console.log("Товар добавлен в корзину"))
+                .catch((error) => console.log(error));
+            })
+            .catch((error) => console.log(error));
         }
       })
       .catch((error) => console.log(error));
   };
 
+  const fillingSortItems = (goods: IGoods[]) => {
+    let categoriesArray: string[] = [];
+    let tagsArray: string[] = [];
+
+    goods.forEach((item) => {
+      item.type.forEach((type: string) => {
+        if (!categoriesArray.includes(type)) {
+          categoriesArray.push(type);
+        }
+      });
+      item.tags.forEach((tag: string) => {
+        if (!tagsArray.includes(tag)) {
+          tagsArray.push(tag);
+        }
+      });
+    });
+    
+    setSortItems({categories: categoriesArray, tags: tagsArray});
+  };
+
   useEffect(() => {
-    getGoodsList().then((res) => {      
+    getGoodsList().then((res) => {
       setGoods(res.data);
+      fillingSortItems(res.data);
     });
   }, []);
 
@@ -48,7 +70,7 @@ const Catalog = () => {
       <h2 className="page_title">Каталог букетов</h2>
 
       <div className="catalogue_wrapper">
-        <CategoryMenu />
+        <CategoryMenu sortItemsData={sortItems} setGoodsData={setGoods} />
 
         <div className="goods_items">
           {goods.map((item, index) => (
@@ -57,7 +79,7 @@ const Catalog = () => {
                 <img
                   className="goods_card-img"
                   alt="bouquet"
-                  src={item.productImage}
+                  src={item.goodsImage}
                 />
               </div>
               <h3 className="goods_card-title">{item.name}</h3>

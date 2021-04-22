@@ -37,15 +37,16 @@ const useStyles = createUseStyles({
             flexDirection: "column",
             alignItems: "center",
             fontFamily: '"Open sans", sans-serif',
-            padding: '10px',
+            padding: '10px 10px 30px',
+            position: 'relative',
+
             "& .goods_card-imgBlock": {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               maxWidth: "200px",
               width: "100%",
-              maxHeight: "250px",
-              height: "100%",
+              height: "250px",
 
               "& .goods_card-img": {
                 width: "100%",
@@ -56,13 +57,16 @@ const useStyles = createUseStyles({
               margin: "10px 0",
               fontFamily: "inherit",
               fontSize: "20px",
+              textAlign: 'center',
             },
             "& .goods_card-desc": {
-              margin: "0 0 10px",
+              margin: "0 0 20px",
               padding: "0 15px",
               textAlign: "center",
             },
             "& .goods_card-btn": {
+              position: 'absolute',
+              bottom: '0',
               backgroundColor: "#6A5975",
               border: "none",
               borderRadius: "25px",

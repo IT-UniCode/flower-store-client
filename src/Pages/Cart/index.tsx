@@ -33,8 +33,8 @@ const Cart: FC = () => {
       description: "",
       existence: true,
       type: [],
-      tag: [],
-      productImage: "",
+      tags: [],
+      goodsImage: '',
     },
   ]);
 
@@ -51,8 +51,8 @@ const Cart: FC = () => {
             description: goods.data.description,
             existence: goods.data.existence,
             type: goods.data.type,
-            tag: goods.data.tag,
-            productImage: goods.data.productImage,
+            tags: goods.data.tag,
+            goodsImage: goods.data.goodsImage,
           });
         })
         .catch((error) => console.log(error));
@@ -86,11 +86,11 @@ const Cart: FC = () => {
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
-                avatar={<Avatar src={item.productImage} />}
+                avatar={<Avatar src={item.goodsImage} />}
                 title={item.name}
                 description={item.description}
               />
-              <p>{item.price} ₴</p>
+              <span className='goods_price'>{item.price} ₴</span>
             </List.Item>
           )}
         />

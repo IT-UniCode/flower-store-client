@@ -17,6 +17,16 @@ declare interface IGoods {
   description: string;
   existence: boolean;
   type: string[];
-  tag: string[];
-  productImage: string;
+  tags: string[];
+  goodsImage: string;
+}
+
+declare interface ISortItems {
+  categories: string[];
+  tags: string[];
+}
+
+declare interface ISelectedItems {
+  category: string;
+  tag: string;
 }

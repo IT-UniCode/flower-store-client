@@ -6,13 +6,16 @@ const useStyles = createUseStyles({
       maxWidth: "250px",
       width: "100%",
 
-      "& .category-menu_title": {
+      "& .category-menu_title, .tags_title": {
         fontSize: "20px",
+        marginBottom: '10px',
       },
       "& .ant-menu-item-selected, .ant-menu-item-active": {
         backgroundColor: "transparent",
-        fontWeight: "700",
         color: "#39313C",
+      },
+      '& .ant-menu-item-active, .selected_category': {
+        fontWeight: "700",
       },
       "& ul": {
         backgroundColor: "transparent",
@@ -20,7 +23,7 @@ const useStyles = createUseStyles({
         "& .category-menu_item": {
           fontSize: "16px",
         },
-        "& .ant-menu-item-selected:before": {
+        "& .selected_category:before": {
           content: '""',
           position: "absolute",
           left: "0",
@@ -32,6 +35,11 @@ const useStyles = createUseStyles({
           zIndex: "3",
         },
       },
+      '& .clearBtn': {
+        marginTop: '20px',
+        backgroundColor: '#61436b',
+        borderColor: '#61436b',
+      }
     },
   },
 });

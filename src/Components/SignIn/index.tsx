@@ -17,7 +17,7 @@ const SignIn = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { auth, setAuth } = useContext(AppContext);
+  const { setAuth } = useContext(AppContext);
   const [user, setUser] = useState<IUser>({
     email: "",
     password: "",
