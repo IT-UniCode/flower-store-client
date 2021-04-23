@@ -26,7 +26,10 @@ declare interface ISortItems {
   tags: string[];
 }
 
-declare interface ISelectedItems {
-  category: string;
-  tag: string;
+declare interface IBasket {
+  price: number;
+  comment: string;
+  address: string;
+  orderDate: Date;
+  goods: IGoods[];
 }

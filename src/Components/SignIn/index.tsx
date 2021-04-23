@@ -29,7 +29,7 @@ const SignIn = () => {
         const decode: any = jwtDecode(res.data.token);
         localStorage.setItem("jwt", res.data.token);
         localStorage.setItem("userId", decode._id);
-        
+
         setAuth(true);
         history.push('/account')
       })

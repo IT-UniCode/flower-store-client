@@ -1,77 +1,43 @@
-import { List, Avatar, Button } from "antd";
+import { List, Avatar } from "antd";
 import { FC, useEffect, useState } from "react";
 
+
 import { getBasketByUserId } from "../../API/basket";
-import { getGoodsById } from "../../API/goods";
-import { Input } from 'antd';
+import { getGoodsByIdArray } from "../../API/goods";
+import CartForm from '../../Components/CartForm';
 
 import useStyles from "./style";
-
-interface IBasket {
-  price: number;
-  comment: string;
-  orderDate: Date;
-  goods: string[];
-}
-
-const { TextArea } = Input;
 
 const Cart: FC = () => {
   const classes = useStyles();
   const [basket, setBasket] = useState<IBasket>({
     price: 0,
     comment: "",
+    address: localStorage.address,
     orderDate: new Date(),
     goods: [],
   });
 
-  const [goodsList, setGoodsList] = useState<IGoods[]>([
-    {
-      _id: "",
-      name: "",
-      price: 0,
-      description: "",
-      existence: true,
-      type: [],
-      tags: [],
-      goodsImage: '',
-    },
-  ]);
-
-  const getGoodsList = (goodsIdList: string[]) => {
-    let goodsArray: IGoods[] = [];
-    goodsIdList.forEach((item, index) => {
-      getGoodsById(item)
-        .then((goods) => {   
-       
-          goodsArray.push( {
-            _id: goods.data.id,
-            name: goods.data.name,
-            price: goods.data.price,
-            description: goods.data.description,
-            existence: goods.data.existence,
-            type: goods.data.type,
-            tags: goods.data.tag,
-            goodsImage: goods.data.goodsImage,
-          });
-        })
-        .catch((error) => console.log(error));
-    });
-    
-    setGoodsList(goodsArray);
-  };
-  
   useEffect(() => {
     getBasketByUserId(localStorage.userId)
-      .then((basket) => {
-        setBasket({
-          price: basket.data.price,
-          comment: basket.data.comment,
-          orderDate: basket.data.orderDate,
-          goods: basket.data[0].goods,
-        });
+      .then((userBasket) => {
+        const copyBasket = { ...basket };
+        copyBasket.comment = userBasket.data[0].comment;
+        copyBasket.orderDate = userBasket.data[0].orderDate;
 
-        getGoodsList(basket.data[0].goods);
+        getGoodsByIdArray(userBasket.data[0].goods)
+          .then(async (goods) => {
+            copyBasket.goods = goods.data;
+            copyBasket.price = await goods.data.reduce(
+              (sum: number, item: IGoods) => {
+                return sum + item.price;
+              },
+              0
+            );
+
+            setBasket(copyBasket);
+          })
+          .catch((error) => console.log(error));
       })
       .catch((error) => console.log(error));
   }, []);
@@ -82,7 +48,7 @@ const Cart: FC = () => {
       <div className="cart_wrapper">
         <List
           itemLayout="horizontal"
-          dataSource={goodsList}
+          dataSource={basket.goods}
           renderItem={(item) => (
             <List.Item>
               <List.Item.Meta
@@ -90,21 +56,11 @@ const Cart: FC = () => {
                 title={item.name}
                 description={item.description}
               />
-              <span className='goods_price'>{item.price} ₴</span>
+              <span className="goods_price">{item.price} ₴</span>
             </List.Item>
           )}
         />
-        <div className='order_wrapper'>
-            <div>
-            <p>Укажите адрес доставки</p>
-            <Input />
-            <TextArea rows={4} className='order_comment'/>
-            </div>
-          <div className='order_inner'>
-            <p className='order_total-price'>Общая стоимость {basket.price} ₴</p>
-            <Button className='order_btn'>Оформить заказ</Button>
-          </div>
-        </div>
+        <CartForm data={basket} setData={setBasket}/>
       </div>
     </div>
   );

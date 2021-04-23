@@ -22,7 +22,8 @@ const Account = () => {
 
   useEffect(() => {
     getUserById(localStorage.userId).then((res) => {
-            
+      localStorage.setItem("address", res.data.address);
+      
       setUser({
         name: res.data.name,
         surname: res.data.surname,

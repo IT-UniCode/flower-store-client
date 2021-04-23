@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { Button, Menu } from "antd";
-import classNames from 'classnames';
+import classNames from "classnames";
 
 import { sortGoodsByAnd, sortGoodsByOr, getGoodsList } from "../../API/goods";
 import TagItems from "../TagItems";
@@ -10,6 +10,11 @@ import useStyles from "./style";
 interface CategoryMenuProps {
   sortItemsData: ISortItems | undefined;
   setGoodsData: React.Dispatch<React.SetStateAction<IGoods[]>>;
+}
+
+interface ISelectedItems {
+  category: string;
+  tag: string;
 }
 
 const CategoryMenu: FC<CategoryMenuProps> = ({
@@ -48,9 +53,9 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
   };
 
   const clearFilters = () => {
-    setSelectedItems({category: '', tag: ''});
+    setSelectedItems({ category: "", tag: "" });
 
-     getGoodsList().then((res) => {
+    getGoodsList().then((res) => {
       setGoodsData(res.data);
     });
   };
@@ -58,10 +63,18 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
   return (
     <div className={classes.root}>
       <div className="category-menu">
-        <h4 className="category-menu_title">Выберите свой идеальный букет</h4>
+        <h4 className="category-menu_title">
+          Выберите свой идеальный букет
+        </h4>
         <Menu>
           {sortItemsData?.categories.map((item, index) => (
-            <Menu.Item key={index} onClick={() => sortData("category", item)} className={classNames({'selected_category': item === selectedItems.category})}>
+            <Menu.Item
+              key={index}
+              onClick={() => sortData("category", item)}
+              className={classNames({
+                selected_category: item === selectedItems.category,
+              })}
+            >
               <span className="category-menu_item">{item}</span>
             </Menu.Item>
           ))}
@@ -73,8 +86,8 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
           setGoodsData={setGoodsData}
         />
         <Button 
-          className="clearBtn"
-          type="primary"
+          className="clearBtn" 
+          type="primary" 
           onClick={clearFilters}
         >
           Очистить

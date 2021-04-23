@@ -9,3 +9,7 @@ export const createBasket = (userId: string) => api.post(`/basket/create/${userI
 export const addGoodsToBasket = (userId: string, goodsId: string) => api.post(`/basket/add-goods/${userId}`,{
   goodsId
 });
+
+export const updateBasketData = (userId: string, body: any) => api.post(`/basket/update/${userId}`,{
+  ...body,
+});
