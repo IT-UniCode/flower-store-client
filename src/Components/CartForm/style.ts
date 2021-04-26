@@ -39,9 +39,12 @@ const useStyles = createUseStyles({
       '& .ant-result': {
         padding: '0px',
 
-        '& .ant-result-icon': {
-          margin: '0px',
-          fontSize: '28px',
+        '& .ant-result-icon ': {
+          margin: '10px 0px 0px',
+          
+          '&> .anticon' :{
+            fontSize: '36px',
+          }
         },
         '& .ant-result-title': {
           fontSize: '18px',

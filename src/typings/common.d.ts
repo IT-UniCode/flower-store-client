@@ -31,5 +31,10 @@ declare interface IBasket {
   comment: string;
   address: string;
   orderDate: Date;
-  goods: IGoods[];
+  goods: IBasketGoodsProps[];
+}
+
+declare interface IBasketGoodsProps {
+  goods: IGoods;
+  count: number;
 }

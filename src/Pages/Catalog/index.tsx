@@ -1,41 +1,48 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useContext } from "react";
 import { Card, Button } from "antd";
 
 import { getGoodsList } from "../../API/goods";
 import {
   createBasket,
   getBasketByUserId,
-  addGoodsToBasket,
+  updateGoodsOnBasket,
 } from "../../API/basket";
 import CategoryMenu from "../../Components/CategoryMenu";
+import { AppContext } from "../../Context";
 
 import useStyles from "./style";
+import { useHistory, withRouter } from "react-router";
 
 const Catalog: FC = () => {
   const classes = useStyles();
-
+  const { auth } = useContext(AppContext);
+  const history = useHistory();
   const [goods, setGoods] = useState<IGoods[]>([]);
   const [sortItems, setSortItems] = useState<ISortItems>();
 
   const buy = (goodsId: string) => {
-    getBasketByUserId(localStorage.userId)
-      .then((res) => {
-        if (res.data.length > 0) {
-          addGoodsToBasket(localStorage.userId, goodsId)
-            .then(() => console.log("Товар добавлен в корзину"))
-            .catch((error) => console.log(error));
-        } else {
-          createBasket(localStorage.userId)
-            .then(() => {
-              console.log("Корзина создана");
-              addGoodsToBasket(localStorage.userId, goodsId)
-                .then(() => console.log("Товар добавлен в корзину"))
-                .catch((error) => console.log(error));
-            })
-            .catch((error) => console.log(error));
-        }
-      })
-      .catch((error) => console.log(error));
+    if (auth) {
+      getBasketByUserId(localStorage.userId)
+        .then((res) => {
+          if (res.data.length > 0) {
+            updateGoodsOnBasket(localStorage.userId, goodsId, "+")
+              .then(() => console.log("Товар добавлен в корзину"))
+              .catch((error) => console.log(error));
+          } else {
+            createBasket(localStorage.userId)
+              .then(() => {
+                console.log("Корзина создана");
+                updateGoodsOnBasket(localStorage.userId, goodsId, "+")
+                  .then(() => console.log("Товар добавлен в корзину"))
+                  .catch((error) => console.log(error));
+              })
+              .catch((error) => console.log(error));
+          }
+        })
+        .catch((error) => console.log(error));
+    } else {
+      history.push("/signin");
+    }
   };
 
   const fillingSortItems = (goods: IGoods[]) => {
@@ -54,8 +61,8 @@ const Catalog: FC = () => {
         }
       });
     });
-    
-    setSortItems({categories: categoriesArray, tags: tagsArray});
+
+    setSortItems({ categories: categoriesArray, tags: tagsArray });
   };
 
   useEffect(() => {
@@ -95,4 +102,4 @@ const Catalog: FC = () => {
   );
 };
 
-export default Catalog;
+export default withRouter(Catalog);

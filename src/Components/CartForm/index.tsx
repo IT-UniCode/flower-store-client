@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import classNames from "classnames";
 
 import { Input, Button, Result } from "antd";
-import { updateBasketData } from "../../API/basket";
+import { confirmBasket } from "../../API/basket";
 
 import useStyles from "./style";
 
@@ -19,13 +19,13 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
 
   const sendBasket = () => {
     if (data.address.length > 0) {
-      updateBasketData(localStorage.userId, {
+      confirmBasket(localStorage.userId, {
         address: data.address,
         comment: data.comment,
         price: data.price,
         orderDate: new Date(),
       })
-      .then(() => setStatus(prev => (true)));
+      .then(() => setStatus(true));
     }
   };
   return (
