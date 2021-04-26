@@ -6,8 +6,10 @@ export const getBasketById = (basketId: string) =>
 export const getBasketByUserId = (userId: string) =>
   api.get(`/basket/user/${userId}`);
 
-export const createBasket = (userId: string) =>
-  api.post(`/basket/create/${userId}`);
+export const createBasket = (userId: string, address: string) =>
+  api.post(`/basket/create/${userId}`, {
+    address,
+  });
 
 export const updateGoodsOnBasket = (
   userId: string,
@@ -22,4 +24,9 @@ export const updateGoodsOnBasket = (
 export const confirmBasket = (userId: string, body: any) =>
   api.post(`/basket/confirm/${userId}`, {
     ...body,
+  });
+
+  export const delGoodsFromBasket = (userId: string, goodsId: string) =>
+  api.patch(`/basket/delete-goods/${userId}`, {
+    goodsId,
   });

@@ -1,8 +1,11 @@
 import { List } from "antd";
-import { AxiosResponse } from "axios";
 import { FC, useEffect, useState } from "react";
 
-import { getBasketByUserId, updateGoodsOnBasket } from "../../API/basket";
+import {
+  getBasketByUserId,
+  updateGoodsOnBasket,
+  delGoodsFromBasket,
+} from "../../API/basket";
 import { getGoodsByIdArray } from "../../API/goods";
 import CartForm from "../../Components/CartForm";
 
@@ -30,6 +33,19 @@ const Cart: FC = () => {
         })
         .catch((error) => console.log(error));
     }
+  };
+
+  const deleteGoods = (startId: number, goodsId: string) => {
+    const copyBasket = { ...basket };
+    copyBasket.price -=
+      copyBasket.goods[startId].goods.price * copyBasket.goods[startId].count;
+    copyBasket.goods.splice(startId, 1);
+
+    delGoodsFromBasket(localStorage.userId, goodsId)
+      .then(() => console.log("Товар удалён"))
+      .catch((error) => console.log(`Error ${error}`));
+
+    setBasket(copyBasket);
   };
 
   const getGoods = async (serverBasket: IServerBasket) => {
@@ -104,7 +120,9 @@ const Cart: FC = () => {
                 title={item.goods.name}
                 description={item.goods.description}
               />
-
+              <button onClick={() => deleteGoods(index, item.goods._id)}>
+                DEL
+              </button>
               <div className="goods_count">
                 Количество
                 <button

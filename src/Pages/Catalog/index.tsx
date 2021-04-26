@@ -29,7 +29,7 @@ const Catalog: FC = () => {
               .then(() => console.log("Товар добавлен в корзину"))
               .catch((error) => console.log(error));
           } else {
-            createBasket(localStorage.userId)
+            createBasket(localStorage.userId, localStorage.address)
               .then(() => {
                 console.log("Корзина создана");
                 updateGoodsOnBasket(localStorage.userId, goodsId, "+")
