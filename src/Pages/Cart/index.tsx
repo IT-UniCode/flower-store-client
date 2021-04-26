@@ -1,4 +1,5 @@
 import { List } from "antd";
+import { AxiosResponse } from "axios";
 import { FC, useEffect, useState } from "react";
 
 import { getBasketByUserId, updateGoodsOnBasket } from "../../API/basket";
@@ -10,7 +11,7 @@ import useStyles from "./style";
 const Cart: FC = () => {
   const classes = useStyles();
 
-  const [basket, setBasket] = useState<IBasket>({
+  const [basket, setBasket] = useState<IClientBasket>({
     price: 0,
     comment: "",
     address: localStorage.address,
@@ -31,39 +32,54 @@ const Cart: FC = () => {
     }
   };
 
+  const getGoods = async (serverBasket: IServerBasket) => {
+    const goodsArray: IBasketGoodsProps[] = [];
+    let goodsIdArray: string[] = [];
+    let totalPrice: number = 0;
+
+    for (let i = 0; i < serverBasket.goods.length; i++) {
+      goodsIdArray.push(serverBasket.goods[i].goodsId);
+    }
+
+    await getGoodsByIdArray(goodsIdArray)
+      .then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          goodsArray.push({
+            goods:
+              res.data[
+                res.data.findIndex(
+                  (goodsItem: IGoods) => goodsItem._id === goodsIdArray[i]
+                )
+              ],
+            count: serverBasket.goods[i].count,
+          });
+          totalPrice += res.data[i].price * serverBasket.goods[i].count;
+        }
+      })
+      .catch((error) => console.log(error));
+
+    return { goodsArray, totalPrice };
+  };
+
   useEffect(() => {
     getBasketByUserId(localStorage.userId)
-      .then(async (userBasket) => {
-        const copyBasket: IBasket = {
+      .then(async (serverBasket) => {
+        const clientBasket: IClientBasket = {
           price: 0,
           comment: "",
           address: localStorage.address,
           orderDate: new Date(),
           goods: [],
         };
-        copyBasket.comment = userBasket.data[0].comment;
-        copyBasket.orderDate = userBasket.data[0].orderDate;
 
-        let goodsIdArray: string[] = [];
+        const { goodsArray, totalPrice } = await getGoods(serverBasket.data[0]);
 
-        for (let i = 0; i < userBasket.data[0].goods.length; i++) {
-          goodsIdArray.push(userBasket.data[0].goods[i].goodsId);
-        }
+        clientBasket.comment = serverBasket.data[0].comment;
+        clientBasket.orderDate = serverBasket.data[0].orderDate;
+        clientBasket.goods = goodsArray;
+        clientBasket.price = totalPrice;
 
-        await getGoodsByIdArray(goodsIdArray)
-          .then((res) => {
-            for (let i = 0; i < res.data.length; i++) {
-              copyBasket.goods.push({
-                goods: res.data[i],
-                count: userBasket.data[0].goods[i].count,
-              });
-              copyBasket.price +=
-                res.data[i].price * userBasket.data[0].goods[i].count;
-            }
-          })
-          .catch((error) => console.log(error));
-
-        setBasket(copyBasket);
+        setBasket(clientBasket);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -88,7 +104,8 @@ const Cart: FC = () => {
                 title={item.goods.name}
                 description={item.goods.description}
               />
-              <span className="goods_count">
+
+              <div className="goods_count">
                 Количество
                 <button
                   className="count_btn"
@@ -103,11 +120,11 @@ const Cart: FC = () => {
                 >
                   +
                 </button>
-              </span>
-              <span className="goods_price">
+              </div>
+              <div className="goods_price">
                 {item.goods.price} ₴
                 <span className="goods_price-desc"> (ед.)</span>
-              </span>
+              </div>
             </List.Item>
           )}
         />

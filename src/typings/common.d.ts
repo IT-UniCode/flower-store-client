@@ -26,7 +26,7 @@ declare interface ISortItems {
   tags: string[];
 }
 
-declare interface IBasket {
+declare interface IClientBasket {
   price: number;
   comment: string;
   address: string;
@@ -37,4 +37,15 @@ declare interface IBasket {
 declare interface IBasketGoodsProps {
   goods: IGoods;
   count: number;
+}
+
+declare interface IServerBasket {
+  price: number;
+  comment: string;
+  address: string;
+  orderDate: Date;
+  goods: {
+    goodsId: string;
+    count: number;
+  }[];
 }

@@ -7,8 +7,8 @@ import { confirmBasket } from "../../API/basket";
 import useStyles from "./style";
 
 interface CartFormProps {
-  data: IBasket;
-  setData: React.Dispatch<React.SetStateAction<IBasket>>;
+  data: IClientBasket;
+  setData: React.Dispatch<React.SetStateAction<IClientBasket>>;
 }
 
 const { TextArea } = Input;
