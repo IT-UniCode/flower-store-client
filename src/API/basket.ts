@@ -16,7 +16,7 @@ export const updateGoodsOnBasket = (
   goodsId: string,
   op: string
 ) =>
-  api.put(`/basket/update-goods/${userId}`, {
+  api.patch(`/basket/update-goods/${userId}`, {
     goodsId,
     op,
   });

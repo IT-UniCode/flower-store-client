@@ -29,9 +29,9 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
     }
   };
   return (
-    <div className={classes.root}>
+    <form className={classes.root}>
       <div>
-        <p>Укажите адрес доставки</p>
+        <label>Укажите адрес доставки</label>
         <Input
           value={data.address}
           placeholder="Введите адрес доставки"
@@ -57,7 +57,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         </Button>
         {status && <Result status="success" title="Заказ принят" />}
       </div>
-    </div>
+    </form>
   );
 };
 

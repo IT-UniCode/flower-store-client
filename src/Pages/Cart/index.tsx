@@ -8,6 +8,12 @@ import {
 } from "../../API/basket";
 import { getGoodsByIdArray } from "../../API/goods";
 import CartForm from "../../Components/CartForm";
+import { Button } from "antd";
+import {
+  CloseOutlined,
+  MinusSquareOutlined,
+  PlusSquareOutlined,
+} from "@ant-design/icons";
 
 import useStyles from "./style";
 
@@ -24,28 +30,28 @@ const Cart: FC = () => {
 
   const changeGoodsCount = (op: string, goodsId: string, index: number) => {
     if (basket.goods[index].count + Number(op + 1) !== 0) {
+      const copyBasket = { ...basket };
+      copyBasket.goods[index].count += Number(op + 1);
+      copyBasket.price += Number(op + copyBasket.goods[index].goods.price);
+      setBasket(copyBasket);
+
       updateGoodsOnBasket(localStorage.userId, goodsId, op)
-        .then(() => {
-          const copyBasket = { ...basket };
-          copyBasket.goods[index].count += Number(op + 1);
-          copyBasket.price += Number(op + copyBasket.goods[index].goods.price);
-          setBasket(copyBasket);
-        })
+        .then(() => {})
         .catch((error) => console.log(error));
     }
   };
 
   const deleteGoods = (startId: number, goodsId: string) => {
-    const copyBasket = { ...basket };
-    copyBasket.price -=
-      copyBasket.goods[startId].goods.price * copyBasket.goods[startId].count;
-    copyBasket.goods.splice(startId, 1);
-
     delGoodsFromBasket(localStorage.userId, goodsId)
-      .then(() => console.log("Товар удалён"))
+      .then(() => {
+        const copyBasket = { ...basket };
+        copyBasket.price -=
+          copyBasket.goods[startId].goods.price *
+          copyBasket.goods[startId].count;
+        copyBasket.goods.splice(startId, 1);
+        setBasket(copyBasket);
+      })
       .catch((error) => console.log(`Error ${error}`));
-
-    setBasket(copyBasket);
   };
 
   const getGoods = async (serverBasket: IServerBasket) => {
@@ -120,24 +126,23 @@ const Cart: FC = () => {
                 title={item.goods.name}
                 description={item.goods.description}
               />
-              <button onClick={() => deleteGoods(index, item.goods._id)}>
-                DEL
-              </button>
+              <Button
+                className="del_btn"
+                icon={<CloseOutlined />}
+                onClick={() => deleteGoods(index, item.goods._id)}
+              />
               <div className="goods_count">
-                Количество
-                <button
+                <Button
                   className="count_btn"
+                  icon={<MinusSquareOutlined />}
                   onClick={() => changeGoodsCount("-", item.goods._id, index)}
-                >
-                  -
-                </button>
+                />
                 {item.count}
-                <button
+                <Button
                   className="count_btn"
+                  icon={<PlusSquareOutlined />}
                   onClick={() => changeGoodsCount("+", item.goods._id, index)}
-                >
-                  +
-                </button>
+                />
               </div>
               <div className="goods_price">
                 {item.goods.price} ₴
