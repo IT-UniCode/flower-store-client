@@ -4,6 +4,9 @@ const useStyles = createUseStyles({
   root: {
     backgroundColor: "#39313c",
     border: "none",
+    position: "fixed", 
+    zIndex: '2000', 
+    width: "100%",
 
     "& .header_inner": {
       maxWidth: '1200px', 

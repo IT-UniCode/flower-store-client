@@ -1,4 +1,3 @@
-import { List } from "antd";
 import { FC, useEffect, useState } from "react";
 
 import {
@@ -6,14 +5,15 @@ import {
   updateGoodsOnBasket,
   delGoodsFromBasket,
 } from "../../API/basket";
-import { getGoodsByIdArray } from "../../API/goods";
-import CartForm from "../../Components/CartForm";
-import { Button } from "antd";
 import {
   CloseOutlined,
   MinusSquareOutlined,
   PlusSquareOutlined,
 } from "@ant-design/icons";
+import { getGoodsByIdArray } from "../../API/goods";
+import CartForm from "../../Components/CartForm";
+import { Button, List } from "antd";
+import { Operation } from "../../utils/consts";
 
 import useStyles from "./style";
 
@@ -34,10 +34,7 @@ const Cart: FC = () => {
       copyBasket.goods[index].count += Number(op + 1);
       copyBasket.price += Number(op + copyBasket.goods[index].goods.price);
       setBasket(copyBasket);
-
-      updateGoodsOnBasket(localStorage.userId, goodsId, op)
-        .then(() => {})
-        .catch((error) => console.log(error));
+      updateGoodsOnBasket(localStorage.userId, goodsId, op);
     }
   };
 
@@ -135,13 +132,17 @@ const Cart: FC = () => {
                 <Button
                   className="count_btn"
                   icon={<MinusSquareOutlined />}
-                  onClick={() => changeGoodsCount("-", item.goods._id, index)}
+                  onClick={() =>
+                    changeGoodsCount(Operation.minus, item.goods._id, index)
+                  }
                 />
                 {item.count}
                 <Button
                   className="count_btn"
                   icon={<PlusSquareOutlined />}
-                  onClick={() => changeGoodsCount("+", item.goods._id, index)}
+                  onClick={() =>
+                    changeGoodsCount(Operation.plus, item.goods._id, index)
+                  }
                 />
               </div>
               <div className="goods_price">

@@ -1,40 +1,49 @@
 import React, { FC, useEffect, useState, useContext } from "react";
+import { useHistory, withRouter } from "react-router";
 import { Card, Button } from "antd";
 
+import { AppContext } from "../../Context";
+
+import CategoryMenu from "../../Components/CategoryMenu";
+import DescPopover from '../../Components/DescPopover';
+import { Operation } from "../../utils/consts";
 import { getGoodsList } from "../../API/goods";
 import {
   createBasket,
   getBasketByUserId,
   updateGoodsOnBasket,
 } from "../../API/basket";
-import CategoryMenu from "../../Components/CategoryMenu";
-import { AppContext } from "../../Context";
+
 
 import useStyles from "./style";
-import { useHistory, withRouter } from "react-router";
 
 const Catalog: FC = () => {
   const classes = useStyles();
+
   const { auth } = useContext(AppContext);
   const history = useHistory();
   const [goods, setGoods] = useState<IGoods[]>([]);
   const [sortItems, setSortItems] = useState<ISortItems>();
+
 
   const buy = (goodsId: string) => {
     if (auth) {
       getBasketByUserId(localStorage.userId)
         .then((res) => {
           if (res.data.length > 0) {
-            updateGoodsOnBasket(localStorage.userId, goodsId, "+")
-              .then(() => console.log("Товар добавлен в корзину"))
-              .catch((error) => console.log(error));
+            updateGoodsOnBasket(
+              localStorage.userId,
+              goodsId,
+              Operation.plus
+            ).catch((error) => console.log(error));
           } else {
             createBasket(localStorage.userId, localStorage.address)
               .then(() => {
-                console.log("Корзина создана");
-                updateGoodsOnBasket(localStorage.userId, goodsId, "+")
-                  .then(() => console.log("Товар добавлен в корзину"))
-                  .catch((error) => console.log(error));
+                updateGoodsOnBasket(
+                  localStorage.userId,
+                  goodsId,
+                  Operation.plus
+                ).catch((error) => console.log(error));
               })
               .catch((error) => console.log(error));
           }
@@ -89,8 +98,8 @@ const Catalog: FC = () => {
                   src={item.goodsImage}
                 />
               </div>
-              <h3 className="goods_card-title">{item.name}</h3>
-              <p className="goods_card-desc">{item.description}</p>
+              <DescPopover title={item.name} desc={item.description} checkId={item._id}/>
+              <p className="goods_card-price">{item.price} ₴</p>
               <Button className="goods_card-btn" onClick={() => buy(item._id)}>
                 Заказать
               </Button>

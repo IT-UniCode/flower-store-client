@@ -2,8 +2,6 @@ import { Layout, Menu } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
 
-// import { AppContext } from "../../Context";
-
 import logo_img from "../../assets/img/poppy-flower.png";
 
 import useStyles from "./style";
@@ -14,7 +12,6 @@ const CustomHeader = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  //const { auth, setAuth } = useContext(AppContext);
   const [path, setPath] = useState(["/"]);
 
   useEffect(() => {
@@ -22,10 +19,7 @@ const CustomHeader = () => {
   }, [history.location.pathname]);
 
   return (
-    <Header
-      className={classes.root}
-      style={{ position: "fixed", zIndex: 1, width: "100%" }}
-    >
+    <Header className={classes.root}>
       <div className="header_inner">
         <Menu selectedKeys={path}>
           <Menu.Item key="1">
