@@ -5,24 +5,27 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Routes from "./Routes";
 import CustomHeader from "./Components/CustomHeader";
 import CustomFooter from "./Components/CustomFooter";
-import AppProvider from './Context';
+import AppProvider from "./Context";
+import CountProvider from "./Context/CountContext";
 
-import useStyles from './style';
-import 'antd/dist/antd.css';
+import useStyles from "./style";
+import "antd/dist/antd.css";
 
 const App = () => {
   const classes = useStyles();
-  
+
   return (
     <div className={classes.root}>
       <AppProvider>
-        <Router>
-          <Layout>
-            <CustomHeader />
-            <Routes />
-            <CustomFooter />
-          </Layout>
-        </Router>
+        <CountProvider>
+          <Router>
+            <Layout>
+              <CustomHeader />
+              <Routes />
+              <CustomFooter />
+            </Layout>
+          </Router>
+        </CountProvider>
       </AppProvider>
     </div>
   );

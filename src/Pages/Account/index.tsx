@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { AppContext } from "../../Context";
+import { CountContext } from "../../Context/CountContext";
 import { getUserById } from "../../API/user";
 
 import useStyles from "./style";
@@ -8,6 +9,8 @@ import useStyles from "./style";
 const Account = () => {
   const classes = useStyles();
   const { setAuth } = useContext(AppContext);
+  const { setCount } = useContext(CountContext);
+  
   const [user, setUser] = useState<IUser>({
     name: "",
     surname: "",
@@ -41,6 +44,7 @@ const Account = () => {
   const logout = () => {
     localStorage.clear();
     setAuth(false);
+    setCount(0);
   };
 
   return (

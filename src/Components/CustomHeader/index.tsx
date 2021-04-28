@@ -1,18 +1,23 @@
-import { Layout, Menu } from "antd";
-import { useEffect, useState } from "react";
+import { Layout, Menu, Badge, Button } from "antd";
+import { useEffect, useState, useContext, FC } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
 
+import { ShoppingCartOutlined } from "@ant-design/icons";
+import { AppContext } from "../../Context";
+import { CountContext } from "../../Context/CountContext";
 import logo_img from "../../assets/img/poppy-flower.png";
 
 import useStyles from "./style";
 
 const { Header } = Layout;
 
-const CustomHeader = () => {
+const CustomHeader: FC = () => {
   const classes = useStyles();
   const history = useHistory();
 
   const [path, setPath] = useState(["/"]);
+  const { auth } = useContext(AppContext);
+  const { count } = useContext(CountContext);
 
   useEffect(() => {
     setPath([`${history.location.pathname}`]);
@@ -22,7 +27,7 @@ const CustomHeader = () => {
     <Header className={classes.root}>
       <div className="header_inner">
         <Menu selectedKeys={path}>
-          <Menu.Item key="1">
+          <Menu.Item key="home">
             <Link to="/">
               <img className="logo_link" src={logo_img} alt="logo" />
             </Link>
@@ -42,14 +47,16 @@ const CustomHeader = () => {
               О нас
             </Link>
           </Menu.Item>
-          <Menu.Item key="/cart" className="menu_item_right menu_item_cart">
-            <Link to="/cart" className="menu_link">
-              Корзина
-            </Link>
-          </Menu.Item>
+            <Menu.Item key="/cart" className="menu_item_right menu_item_cart">
+          <Badge count={count}>
+              <Link to="/cart" className="menu_link">
+                <Button icon={<ShoppingCartOutlined />} className="cart_btn" />
+              </Link>
+          </Badge>
+            </Menu.Item>
           <Menu.Item key="/account" className="menu_item_right">
             <Link to="/account" className="menu_link">
-              Кабинет
+              {auth ? "Кабинет" : "Войти"}
             </Link>
           </Menu.Item>
         </Menu>

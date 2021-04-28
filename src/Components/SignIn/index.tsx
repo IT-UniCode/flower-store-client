@@ -3,7 +3,9 @@ import { Form, Input, Button } from "antd";
 import { Link, useHistory, withRouter } from "react-router-dom";
 
 import { signin } from "../../API/user";
+import { getBasketByUserId } from "../../API/basket";
 import { AppContext } from "../../Context";
+import { CountContext } from "../../Context/CountContext";
 import jwtDecode from 'jwt-decode';
 
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
@@ -18,6 +20,8 @@ const SignIn = () => {
   const history = useHistory();
 
   const { setAuth } = useContext(AppContext);
+  const { setCount } = useContext(CountContext);
+
   const [user, setUser] = useState<IUser>({
     email: "",
     password: "",
@@ -29,6 +33,15 @@ const SignIn = () => {
         const decode: any = jwtDecode(res.data.token);
         localStorage.setItem("jwt", res.data.token);
         localStorage.setItem("userId", decode._id);
+
+
+        getBasketByUserId(decode._id)
+          .then(async (basket) => {
+            const count = await basket.data[0].goods.reduce((sum: number, curr: any) => {
+              return sum += curr.count;
+            }, 0)            
+            setCount(count);
+          })
 
         setAuth(true);
         history.push('/account')

@@ -27,6 +27,8 @@ const useStyles = createUseStyles({
       backgroundColor: "#39313c",
       border: "none",
       lineHeight: "0px",
+      display: "flex",
+      alignItems: "center",
 
       "& .logo_link": {
         width: "40px",
@@ -60,7 +62,31 @@ const useStyles = createUseStyles({
       },
 
       "& .menu_item_cart": {
-        right: "105px",
+        right: "125px",
+        bottom: "-8px",
+
+        "& .ant-badge": {
+          position: "fixed",
+
+          "& .cart_btn": {
+            background: "none",
+            border: "none",
+            outline: "none",
+
+            '&:focus': {
+              color: '#'
+            },
+
+            "& .anticon": {
+              color: "#fff",
+
+              "& svg": {
+                width: "30px",
+                height: "30px",
+              },
+            },
+          },
+        },
       },
 
       "& .menu_item_contact": {

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 
 import {
   getBasketByUserId,
@@ -14,12 +14,13 @@ import { getGoodsByIdArray } from "../../API/goods";
 import CartForm from "../../Components/CartForm";
 import { Button, List } from "antd";
 import { Operation } from "../../utils/consts";
+import { CountContext } from "../../Context/CountContext";
 
 import useStyles from "./style";
 
 const Cart: FC = () => {
   const classes = useStyles();
-
+  const { count, setCount } = useContext(CountContext);
   const [basket, setBasket] = useState<IClientBasket>({
     price: 0,
     comment: "",
@@ -35,17 +36,22 @@ const Cart: FC = () => {
       copyBasket.price += Number(op + copyBasket.goods[index].goods.price);
       setBasket(copyBasket);
       updateGoodsOnBasket(localStorage.userId, goodsId, op);
+
+      setCount(count + Number(op + 1));
     }
   };
 
   const deleteGoods = (startId: number, goodsId: string) => {
+    const copyBasket = { ...basket };
+    setCount(count - copyBasket.goods[startId].count);
+
     delGoodsFromBasket(localStorage.userId, goodsId)
       .then(() => {
-        const copyBasket = { ...basket };
         copyBasket.price -=
           copyBasket.goods[startId].goods.price *
           copyBasket.goods[startId].count;
         copyBasket.goods.splice(startId, 1);
+
         setBasket(copyBasket);
       })
       .catch((error) => console.log(`Error ${error}`));

@@ -1,58 +1,18 @@
-import React, { FC, useEffect, useState, useContext } from "react";
-import { useHistory, withRouter } from "react-router";
-import { Card, Button } from "antd";
-
-import { AppContext } from "../../Context";
+import React, { FC, useEffect, useState } from "react";
+import { withRouter } from "react-router";
 
 import CategoryMenu from "../../Components/CategoryMenu";
-import DescPopover from '../../Components/DescPopover';
-import { Operation } from "../../utils/consts";
 import { getGoodsList } from "../../API/goods";
-import {
-  createBasket,
-  getBasketByUserId,
-  updateGoodsOnBasket,
-} from "../../API/basket";
 
+import GoodsList from "../../Components/GoodsList";
 
 import useStyles from "./style";
 
 const Catalog: FC = () => {
   const classes = useStyles();
 
-  const { auth } = useContext(AppContext);
-  const history = useHistory();
   const [goods, setGoods] = useState<IGoods[]>([]);
   const [sortItems, setSortItems] = useState<ISortItems>();
-
-
-  const buy = (goodsId: string) => {
-    if (auth) {
-      getBasketByUserId(localStorage.userId)
-        .then((res) => {
-          if (res.data.length > 0) {
-            updateGoodsOnBasket(
-              localStorage.userId,
-              goodsId,
-              Operation.plus
-            ).catch((error) => console.log(error));
-          } else {
-            createBasket(localStorage.userId, localStorage.address)
-              .then(() => {
-                updateGoodsOnBasket(
-                  localStorage.userId,
-                  goodsId,
-                  Operation.plus
-                ).catch((error) => console.log(error));
-              })
-              .catch((error) => console.log(error));
-          }
-        })
-        .catch((error) => console.log(error));
-    } else {
-      history.push("/signin");
-    }
-  };
 
   const fillingSortItems = (goods: IGoods[]) => {
     let categoriesArray: string[] = [];
@@ -87,25 +47,7 @@ const Catalog: FC = () => {
 
       <div className="catalogue_wrapper">
         <CategoryMenu sortItemsData={sortItems} setGoodsData={setGoods} />
-
-        <div className="goods_items">
-          {goods.map((item, index) => (
-            <Card key={index}>
-              <div className="goods_card-imgBlock">
-                <img
-                  className="goods_card-img"
-                  alt="bouquet"
-                  src={item.goodsImage}
-                />
-              </div>
-              <DescPopover title={item.name} desc={item.description} checkId={item._id}/>
-              <p className="goods_card-price">{item.price} ₴</p>
-              <Button className="goods_card-btn" onClick={() => buy(item._id)}>
-                Заказать
-              </Button>
-            </Card>
-          ))}
-        </div>
+        <GoodsList goodsArray={goods} />
       </div>
     </div>
   );
