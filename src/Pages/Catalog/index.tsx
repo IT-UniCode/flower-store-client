@@ -40,7 +40,7 @@ const Catalog: FC = () => {
       fillingSortItems(res.data);
     });
   }, []);
-
+  
   return (
     <div className={classes.root}>
       <h2 className="page_title">Каталог букетов</h2>

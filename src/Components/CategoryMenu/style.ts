@@ -3,7 +3,7 @@ import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
   root: {
     "& .category-menu": {
-      maxWidth: "250px",
+      minWidth: "250px",
       width: "100%",
 
       "& .category-menu_title, .tags_title": {

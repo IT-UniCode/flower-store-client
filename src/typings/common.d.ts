@@ -49,3 +49,10 @@ declare interface IServerBasket {
     count: number;
   }[];
 }
+
+declare interface IPage {
+  quantityOfItems: number;
+  currentPage: number;
+  startIndex: number;
+  endIndex: number;
+}
