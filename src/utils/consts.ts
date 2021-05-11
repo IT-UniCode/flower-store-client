@@ -1,16 +1,21 @@
-export enum  Operation {
+export enum Operation {
   plus = '+',
-  minus = '-'
-};
+  minus = '-',
+}
 
-export enum  Type {
+export enum Type {
   Large_bouquet = 'Большой букет',
   Small_bouquet = 'Маленький букет',
-};
+}
 
-export enum  Tags {
-  Birthday = "День рождения",
+export enum Tags {
+  Birthday = 'День рождения',
   March_8 = '8 Марта',
-};
+}
+
+export enum FilterItems {
+  type = 'type',
+  tags = 'tags',
+}
 
 export const QUANTITY_OF_PAGE_ITEMS: number = 9;

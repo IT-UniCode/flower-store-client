@@ -15,7 +15,7 @@ export const sortGoods = (type: string, tags: string) =>
     tags,
   });
 
-export const goodsPagination = (
+export const getGoodsListPage = (
   type: string,
   tags: string,
   startId: number,

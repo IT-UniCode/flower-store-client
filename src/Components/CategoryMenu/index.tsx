@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import { Button, Menu } from "antd";
-import classNames from "classnames";
+import React, { FC } from 'react';
+import { Button, Menu } from 'antd';
+import classNames from 'classnames';
 
-import { Type } from "../../utils/consts";
-import TagItems from "../TagItems";
+import { Type, FilterItems } from '../../utils/consts';
+import TagItems from '../TagItems';
 
-import useStyles from "./style";
+import useStyles from './style';
 
 interface CategoryMenuProps {
   selectedItems: ISelectedItems;
@@ -18,9 +18,10 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
 }) => {
   const classes = useStyles();
 
-  const sortData = (field: string, item: string) => {
+  const filterData = (field: string, item: string) => {
     const copySelectedItems: ISelectedItems = { ...selectedItems };
-    if (field === "type") {
+
+    if (field === FilterItems.type) {
       copySelectedItems.type = item;
     } else {
       copySelectedItems.tags = item;
@@ -30,7 +31,7 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
   };
 
   const clearFilters = () => {
-    setSelectedItems({ type: "", tags: "" });
+    setSelectedItems({ type: '', tags: '' });
   };
 
   return (
@@ -42,8 +43,8 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
             <Menu.Item
               key={index}
               onClick={() =>
-                sortData(
-                  "type",
+                filterData(
+                  FilterItems.type,
                   Object.keys(Type)[Object.values(Type).indexOf(item)]
                 )
               }
@@ -57,8 +58,15 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
             </Menu.Item>
           ))}
         </Menu>
-        <TagItems selectedTag={selectedItems.tags} sortData={sortData} />
-        <Button className="clearBtn" type="primary" onClick={clearFilters}>
+        <TagItems 
+          selectedTag={selectedItems.tags}
+          sortData={filterData}
+        />
+        <Button 
+          className="clearBtn"
+          type="primary"
+          onClick={clearFilters}
+        >
           Очистить
         </Button>
       </div>

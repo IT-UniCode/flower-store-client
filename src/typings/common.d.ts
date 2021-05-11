@@ -26,7 +26,7 @@ declare interface ISelectedItems {
   tags: string;
 }
 
-declare interface ISortItems {
+declare interface IFilterItems {
   type: string[];
   tags: string[];
 }

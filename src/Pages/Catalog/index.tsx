@@ -1,21 +1,21 @@
-import React, { FC, useEffect, useState } from "react";
-import { withRouter } from "react-router";
+import React, { FC, useEffect, useState } from 'react';
+import { withRouter } from 'react-router';
 
-import CategoryMenu from "../../Components/CategoryMenu";
-import { goodsPagination, sortGoods } from "../../API/goods";
-import { QUANTITY_OF_PAGE_ITEMS } from "../../utils/consts";
+import CategoryMenu from '../../Components/CategoryMenu';
+import { getGoodsListPage, sortGoods } from '../../API/goods';
+import { QUANTITY_OF_PAGE_ITEMS } from '../../utils/consts';
 
-import GoodsList from "../../Components/GoodsList";
+import GoodsList from '../../Components/GoodsList';
 
-import useStyles from "./style";
+import useStyles from './style';
 
 const Catalog: FC = () => {
   const classes = useStyles();
 
   const [goods, setGoods] = useState<IGoods[]>([]);
   const [selectedItems, setSelectedItems] = useState<ISelectedItems>({
-    type: "",
-    tags: "",
+    type: '',
+    tags: '',
   });
   const [pageProps, setPageProps] = useState<IPage>({
     quantityOfItems: 0,
@@ -25,7 +25,7 @@ const Catalog: FC = () => {
   });
 
   useEffect(() => {
-    goodsPagination(
+    getGoodsListPage(
       selectedItems.type,
       selectedItems.tags,
       pageProps.startIndex,
@@ -35,11 +35,11 @@ const Catalog: FC = () => {
     });
   }, [selectedItems, pageProps.startIndex, pageProps.endIndex]);
 
-  useEffect( () => {
+  useEffect(() => {
     sortGoods(selectedItems.type, selectedItems.tags).then((res) => {
       setPageProps((prev) => {
-        const data = {...prev};
-        
+        const data = { ...prev };
+
         if (res.data.length <= QUANTITY_OF_PAGE_ITEMS) {
           data.currentPage = 1;
           data.startIndex = 0;
@@ -50,13 +50,11 @@ const Catalog: FC = () => {
         return data;
       });
     });
-
   }, [selectedItems, goods]);
 
   return (
     <div className={classes.root}>
       <h2 className="page_title">Каталог букетов</h2>
-
       <div className="catalogue_wrapper">
         <CategoryMenu
           selectedItems={selectedItems}
