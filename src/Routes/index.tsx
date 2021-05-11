@@ -4,7 +4,7 @@ import { Content } from "antd/lib/layout/layout";
 
 import Home from "../Pages/Home";
 import Catalog from "../Pages/Catalog";
-import About from "../Pages/About";
+import AdminPage from "../Pages/AdminPage";
 import Cart from "../Pages/Cart";
 import Account from "../Pages/Account";
 import SignUp from "../Components/SignUp";
@@ -35,9 +35,9 @@ const ROUTES: IRoutes[] = [
     private: false,
   },
   {
-    path: "/about",
+    path: "/admin-page",
     exact: false,
-    componnent: <About />,
+    componnent: <AdminPage />,
     private: false,
   },
   {

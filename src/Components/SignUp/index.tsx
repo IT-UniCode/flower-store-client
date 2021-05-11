@@ -1,8 +1,8 @@
-import React, { FC, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { Form, Input, Button } from "antd";
+import React, { FC, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { Form, Input, Button } from 'antd';
 
-import { signup } from "../../API/user";
+import { signup } from '../../API/user';
 
 import {
   UserOutlined,
@@ -10,24 +10,24 @@ import {
   LockOutlined,
   PhoneOutlined,
   HomeOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import useStyles from "./style";
+import useStyles from './style';
 
 const SignUp: FC = () => {
   const classes = useStyles();
   const history = useHistory();
 
   const [user, setUser] = useState<IUser>({
-    name: "",
-    surname: "",
-    lastname: "",
-    phone: "",
-    address: "",
-    email: "",
-    password: "",
-    checkPass: "",
-    basketId: "",
+    name: '',
+    surname: '',
+    lastname: '',
+    phone: '',
+    address: '',
+    email: '',
+    password: '',
+    checkPass: '',
+    basketId: '',
   });
 
   const onSubmit = () => {
@@ -39,122 +39,131 @@ const SignUp: FC = () => {
       address: user.address,
       email: user.email,
       password: user.password,
-      basketId: "",
+      basketId: '',
     };
 
     signup(newUser)
       .then(() => {
         setUser({
-          name: "",
-          surname: "",
-          lastname: "",
-          phone: "",
-          address: "",
-          email: "",
-          password: "",
-          checkPass: "",
-          basketId: "",
+          name: '',
+          surname: '',
+          lastname: '',
+          phone: '',
+          address: '',
+          email: '',
+          password: '',
+          checkPass: '',
+          basketId: '',
         });
-        history.push("/signin");
+        history.push('/signin');
       })
       .catch((err) => console.log(`Error: ${err}`));
   };
 
   const formItemsArgs = [
     {
-      name: "name",
+      name: 'name',
       required: true,
-      label: "Введите имя",
-      message: "Please input your name!",
+      label: 'Введите имя',
+      message: 'Please input your Name!',
       prefixComponent: <UserOutlined className="site-form-item-icon" />,
-      placeholder: "Имя",
+      placeholder: 'Имя',
       value: user.name,
+      pattern: /^([A-ZА-я]{1}[a-zа-я]*)$/,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, name: value }));
       },
     },
     {
-      name: "surname",
+      name: 'surname',
       required: true,
-      label: "Введите фамилию",
-      message: "Please input your surname!",
+      label: 'Введите фамилию',
+      message: 'Please input your Surname!',
       prefixComponent: <UserOutlined className="site-form-item-icon" />,
-      placeholder: "Фамилия",
+      placeholder: 'Фамилия',
       value: user.surname,
+      pattern: /^([A-ZА-я]{1}[a-zа-я]*)$/,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, surname: value }));
       },
     },
     {
-      name: "lastname",
+      name: 'lastname',
       required: true,
-      label: "Введите отчество",
-      message: "Please input your lastname!",
+      label: 'Введите отчество',
+      message: 'Please input your Lastname!',
       prefixComponent: <UserOutlined className="site-form-item-icon" />,
-      placeholder: "Отчество",
+      placeholder: 'Отчество',
       value: user.lastname,
+      pattern: /^([A-ZА-я]{1}[a-zа-я]*)$/,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, lastname: value }));
       },
     },
     {
-      name: "phone",
+      name: 'phone',
       required: true,
-      label: "Введите телефон",
-      message: "Please input your phone number!",
+      label: 'Введите телефон',
+      message: 'Please input correct phone number!',
       prefixComponent: <PhoneOutlined className="site-form-item-icon" />,
-      placeholder: "Телефон",
+      placeholder: '380XXXXXXXXX',
       value: user.phone,
+      pattern: /^(\d{9,12})$/,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, phone: value }));
       },
     },
     {
-      name: "address",
+      name: 'address',
       required: false,
-      label: "Введите адрес",
-      message: "Please input your address!",
+      label: 'Введите адрес',
+      message: 'Please input your delivery address!',
       prefixComponent: <HomeOutlined className="site-form-item-icon" />,
-      placeholder: "Адрес",
+      placeholder: 'Адрес доставки',
       value: user.address,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, address: value }));
       },
     },
     {
-      name: "email",
+      name: 'email',
       required: true,
-      label: "Введите email",
-      message: "Please input your email!",
+      label: 'Введите email',
+      message: 'Please input correct email!',
       prefixComponent: <MailOutlined className="site-form-item-icon" />,
-      placeholder: "Email",
+      placeholder: 'Email',
       value: user.email,
+      pattern: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$/,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, email: value }));
       },
     },
     {
-      name: "password",
+      name: 'password',
       required: true,
-      label: "Введите пароль",
-      message: "Please input your password!",
+      label: 'Введите пароль',
+      message: 'Please input your password!',
       prefixComponent: <LockOutlined className="site-form-item-icon" />,
-      placeholder: "Пароль",
+      placeholder: 'Пароль',
       value: user.password,
+      pattern: /(.){6}/,
       onChange(value: string) {
         setUser((prev) => ({ ...prev, password: value }));
       },
     },
     {
-      name: "checkPass",
+      name: 'checkPass',
       required: true,
-      label: "Повторите пароль",
-      message: "Please input your password!",
+      label: 'Повторите пароль',
+      message: 'Please repeat the password!',
       prefixComponent: <LockOutlined className="site-form-item-icon" />,
-      placeholder: "Пароль",
+      placeholder: 'Пароль',
       value: user.checkPass,
+      pattern: /(.){6}/,
       onChange(value: string) {
-        setUser((prev) => ({ ...prev, checkPass: value }));
+        if (user.password !== user.checkPass) {
+          setUser((prev) => ({ ...prev, checkPass: value }));
+        }
       },
     },
   ];
@@ -168,14 +177,29 @@ const SignUp: FC = () => {
               key={index}
               label={item.label}
               name={item.name}
-              rules={[{ required: item.required, message: item.message }]}
+              rules={[
+                {
+                  required: item.required,
+                  message: item.message,
+                  pattern: item.pattern,
+                },
+              ]}
             >
-              <Input
-                prefix={item.prefixComponent}
-                placeholder={item.placeholder}
-                value={item.value}
-                onChange={(e) => item.onChange(e.target.value)}
-              />
+              {item.name === 'password' || item.name === 'checkPass' ? (
+                <Input.Password 
+                  prefix={item.prefixComponent}
+                  placeholder={item.placeholder}
+                  value={item.value}
+                  onChange={(e) => item.onChange(e.target.value)}
+                />
+              ) : (
+                <Input
+                  prefix={item.prefixComponent}
+                  placeholder={item.placeholder}
+                  value={item.value}
+                  onChange={(e) => item.onChange(e.target.value)}
+                />
+              )}
             </Form.Item>
           ))}
 

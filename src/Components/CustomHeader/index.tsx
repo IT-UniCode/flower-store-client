@@ -22,7 +22,7 @@ const CustomHeader: FC = () => {
   useEffect(() => {
     setPath([`${history.location.pathname}`]);
   }, [history.location.pathname]);
-
+  
   return (
     <Header className={classes.root}>
       <div className="header_inner">
@@ -42,11 +42,12 @@ const CustomHeader: FC = () => {
               Каталог
             </Link>
           </Menu.Item>
-          <Menu.Item key="/about">
-            <Link to="/about" className="menu_link">
-              О нас
+          { localStorage.role === 'ADMIN' &&
+          <Menu.Item key="/admin-page">
+            <Link to="/admin-page" className="menu_link">
+              Admin
             </Link>
-          </Menu.Item>
+          </Menu.Item>}
             <Menu.Item key="/cart" className="menu_item_right menu_item_cart">
           <Badge count={count}>
               <Link to="/cart" className="menu_link">

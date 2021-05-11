@@ -33,7 +33,7 @@ const SignIn = () => {
         const decode: any = jwtDecode(res.data.token);
         localStorage.setItem("jwt", res.data.token);
         localStorage.setItem("userId", decode._id);
-
+        localStorage.setItem("role", decode.role);
 
         getBasketByUserId(decode._id)
           .then(async (basket) => {

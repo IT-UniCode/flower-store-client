@@ -1,29 +1,29 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect, useState } from 'react';
 
 import {
   getBasketByUserId,
   updateGoodsOnBasket,
   delGoodsFromBasket,
-} from "../../API/basket";
+} from '../../API/basket';
 import {
   CloseOutlined,
   MinusSquareOutlined,
   PlusSquareOutlined,
-} from "@ant-design/icons";
-import { getGoodsByIdArray } from "../../API/goods";
-import CartForm from "../../Components/CartForm";
-import { Button, List } from "antd";
-import { Operation } from "../../utils/consts";
-import { CountContext } from "../../Context/CountContext";
+} from '@ant-design/icons';
+import { getGoodsByIdArray } from '../../API/goods';
+import CartForm from '../../Components/CartForm';
+import { Button, List } from 'antd';
+import { Operation } from '../../utils/consts';
+import { CountContext } from '../../Context/CountContext';
 
-import useStyles from "./style";
+import useStyles from './style';
 
 const Cart: FC = () => {
   const classes = useStyles();
   const { count, setCount } = useContext(CountContext);
   const [basket, setBasket] = useState<IClientBasket>({
     price: 0,
-    comment: "",
+    comment: '',
     address: localStorage.address,
     orderDate: new Date(),
     goods: [],
@@ -73,7 +73,7 @@ const Cart: FC = () => {
             goods:
               res.data[
                 res.data.findIndex(
-                  (goodsItem: IGoods) => goodsItem._id === goodsIdArray[i]
+                  (goodsItem: any) => goodsItem._id === goodsIdArray[i]
                 )
               ],
             count: serverBasket.goods[i].count,
@@ -91,7 +91,7 @@ const Cart: FC = () => {
       .then(async (serverBasket) => {
         const clientBasket: IClientBasket = {
           price: 0,
-          comment: "",
+          comment: '',
           address: localStorage.address,
           orderDate: new Date(),
           goods: [],
