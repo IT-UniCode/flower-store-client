@@ -6,12 +6,11 @@ import { QUANTITY_OF_PAGE_ITEMS } from "../../utils/consts";
 import useStyles from "./style";
 
 interface PaginationProps {
-  data: IGoods[];
   pageData: IPage;
   setPageData: React.Dispatch<React.SetStateAction<IPage>>;
 }
 
-const CustomPagination: FC<PaginationProps> = ({ data, pageData, setPageData }) => {
+const CustomPagination: FC<PaginationProps> = ({ pageData, setPageData }) => {
   const classes = useStyles();
 
   const changePage = (pageNumber: number) => {
@@ -19,7 +18,7 @@ const CustomPagination: FC<PaginationProps> = ({ data, pageData, setPageData }) 
 
     if (
       pageNumber > 0 &&
-      pageNumber <= Math.ceil(data.length / QUANTITY_OF_PAGE_ITEMS)
+      pageNumber <= Math.ceil(pageData.quantityOfItems / QUANTITY_OF_PAGE_ITEMS)
     ) {
       copyPageProps.currentPage = pageNumber;
       copyPageProps.startIndex =
@@ -29,19 +28,6 @@ const CustomPagination: FC<PaginationProps> = ({ data, pageData, setPageData }) 
 
     setPageData(copyPageProps);
   };
-
-  // useEffect(() => {
-  //   const copyPageProps = { ...pageData };
-  //   copyPageProps.quantityOfItems = data.length;
-
-  //   if (data.length <= QUANTITY_OF_PAGE_ITEMS) {
-  //     copyPageProps.currentPage = 1;
-  //     copyPageProps.startIndex = 0;
-  //     copyPageProps.endIndex = QUANTITY_OF_PAGE_ITEMS;
-  //   }
-
-  //   setPageData(copyPageProps);
-  // }, [data]);
 
   return (
     <Pagination

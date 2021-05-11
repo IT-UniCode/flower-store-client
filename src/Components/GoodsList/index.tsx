@@ -84,7 +84,6 @@ const GoodsList: FC<GoodsListProps> = ({ goodsArray, pageData, setPageData }) =>
         )}
       </div>
       <CustomPagination
-        data={goodsArray}
         pageData={pageData}
         setPageData={setPageData}
       />

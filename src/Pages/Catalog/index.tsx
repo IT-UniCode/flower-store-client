@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { withRouter } from "react-router";
 
 import CategoryMenu from "../../Components/CategoryMenu";
-import { goodsPagination } from "../../API/goods";
+import { goodsPagination, sortGoods } from "../../API/goods";
 import { QUANTITY_OF_PAGE_ITEMS } from "../../utils/consts";
 
 import GoodsList from "../../Components/GoodsList";
@@ -17,15 +17,14 @@ const Catalog: FC = () => {
     type: "",
     tags: "",
   });
-
   const [pageProps, setPageProps] = useState<IPage>({
-    quantityOfItems: goods.length,
+    quantityOfItems: 0,
     currentPage: 1,
     startIndex: 0,
     endIndex: QUANTITY_OF_PAGE_ITEMS,
   });
 
-  useEffect(() => {    
+  useEffect(() => {
     goodsPagination(
       selectedItems.type,
       selectedItems.tags,
@@ -34,7 +33,25 @@ const Catalog: FC = () => {
     ).then((res) => {
       setGoods(res.data);
     });
-  }, [selectedItems, pageProps]);
+  }, [selectedItems, pageProps.startIndex, pageProps.endIndex]);
+
+  useEffect( () => {
+    sortGoods(selectedItems.type, selectedItems.tags).then((res) => {
+      setPageProps((prev) => {
+        const data = {...prev};
+        
+        if (res.data.length <= QUANTITY_OF_PAGE_ITEMS) {
+          data.currentPage = 1;
+          data.startIndex = 0;
+          data.endIndex = QUANTITY_OF_PAGE_ITEMS;
+        }
+        data.quantityOfItems = res.data.length;
+
+        return data;
+      });
+    });
+
+  }, [selectedItems, goods]);
 
   return (
     <div className={classes.root}>
