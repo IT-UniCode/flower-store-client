@@ -2,33 +2,35 @@ import React, { FC } from "react";
 import { Button } from "antd";
 import classNames from "classnames";
 
+import { Tags } from "../../utils/consts";
+
 import useStyles from "./style";
 
 interface TagItemsProps {
-  tagsData: string[] | undefined;
   selectedTag: string;
   sortData: (field: string, item: string) => void;
-  setGoodsData: React.Dispatch<React.SetStateAction<IGoods[]>>;
 }
 
-const TagItems: FC<TagItemsProps> = ({
-  selectedTag,
-  tagsData,
-  sortData,
-  setGoodsData,
-}) => {
+const TagItems: FC<TagItemsProps> = ({ selectedTag, sortData }) => {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <h4 className="tags_title">Выберите стиль букета</h4>
-      {tagsData?.map((item, index) => (
+      {Object.values(Tags).map((item, index) => (
         <div key={index} className="tag_item">
           <Button
             className={classNames({
-              "tag_item-selected": item === selectedTag,
+              "tag_item-selected":
+                Object.keys(Tags)[Object.values(Tags).indexOf(item)] ===
+                selectedTag,
             })}
-            onClick={() => sortData("tag", item)}
+            onClick={() =>
+              sortData(
+                "tags",
+                Object.keys(Tags)[Object.values(Tags).indexOf(item)]
+              )
+            }
           >
             {item}
           </Button>

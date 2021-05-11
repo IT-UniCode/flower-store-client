@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { Pagination } from "antd";
 
 import { QUANTITY_OF_PAGE_ITEMS } from "../../utils/consts";
@@ -7,15 +7,15 @@ import useStyles from "./style";
 
 interface PaginationProps {
   data: IGoods[];
-  pageProps: IPage;
-  setPageProps: React.Dispatch<React.SetStateAction<IPage>>;
+  pageData: IPage;
+  setPageData: React.Dispatch<React.SetStateAction<IPage>>;
 }
 
-const CustomPagination: FC<PaginationProps> = ({ data, pageProps, setPageProps }) => {
+const CustomPagination: FC<PaginationProps> = ({ data, pageData, setPageData }) => {
   const classes = useStyles();
 
   const changePage = (pageNumber: number) => {
-    const copyPageProps = { ...pageProps };
+    const copyPageProps = { ...pageData };
 
     if (
       pageNumber > 0 &&
@@ -25,31 +25,30 @@ const CustomPagination: FC<PaginationProps> = ({ data, pageProps, setPageProps }
       copyPageProps.startIndex =
         pageNumber * QUANTITY_OF_PAGE_ITEMS - QUANTITY_OF_PAGE_ITEMS;
       copyPageProps.endIndex = pageNumber * QUANTITY_OF_PAGE_ITEMS;
-      console.log(copyPageProps);
     }
 
-    setPageProps(copyPageProps);
+    setPageData(copyPageProps);
   };
 
-  useEffect(() => {
-    const copyPageProps = { ...pageProps };
-    copyPageProps.quantityOfItems = data.length;
+  // useEffect(() => {
+  //   const copyPageProps = { ...pageData };
+  //   copyPageProps.quantityOfItems = data.length;
 
-    if (data.length <= QUANTITY_OF_PAGE_ITEMS) {
-      copyPageProps.currentPage = 1;
-      copyPageProps.startIndex = 0;
-      copyPageProps.endIndex = QUANTITY_OF_PAGE_ITEMS;
-    }
+  //   if (data.length <= QUANTITY_OF_PAGE_ITEMS) {
+  //     copyPageProps.currentPage = 1;
+  //     copyPageProps.startIndex = 0;
+  //     copyPageProps.endIndex = QUANTITY_OF_PAGE_ITEMS;
+  //   }
 
-    setPageProps(copyPageProps);
-  }, [data]);
+  //   setPageData(copyPageProps);
+  // }, [data]);
 
   return (
     <Pagination
       className={classes.root}
       showTitle={false}
-      current={pageProps.currentPage}
-      total={pageProps.quantityOfItems}
+      current={pageData.currentPage}
+      total={pageData.quantityOfItems}
       pageSize={QUANTITY_OF_PAGE_ITEMS}
       onChange={(num) => changePage(num)}
     />

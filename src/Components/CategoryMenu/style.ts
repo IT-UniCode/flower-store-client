@@ -3,11 +3,13 @@ import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles({
   root: {
     "& .category-menu": {
-      minWidth: "250px",
+      maxWidth: "320px",
       width: "100%",
 
       "& .category-menu_title, .tags_title": {
         fontSize: "20px",
+        minWidth: '240px',
+        maxWidth: '250px',
         marginBottom: '10px',
       },
       "& .ant-menu-item-selected, .ant-menu-item-active": {

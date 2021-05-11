@@ -1,87 +1,64 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { Button, Menu } from "antd";
 import classNames from "classnames";
 
-import { sortGoods, getGoodsList } from "../../API/goods";
+import { Type } from "../../utils/consts";
 import TagItems from "../TagItems";
 
 import useStyles from "./style";
 
 interface CategoryMenuProps {
-  sortItemsData: ISortItems | undefined;
-  setGoodsData: React.Dispatch<React.SetStateAction<IGoods[]>>;
-}
-
-interface ISelectedItems {
-  category: string;
-  tag: string;
+  selectedItems: ISelectedItems;
+  setSelectedItems: React.Dispatch<React.SetStateAction<ISelectedItems>>;
 }
 
 const CategoryMenu: FC<CategoryMenuProps> = ({
-  sortItemsData,
-  setGoodsData,
+  selectedItems,
+  setSelectedItems,
 }) => {
   const classes = useStyles();
-  const [selectedItems, setSelectedItems] = useState<ISelectedItems>({
-    category: "",
-    tag: "",
-  });
 
   const sortData = (field: string, item: string) => {
     const copySelectedItems: ISelectedItems = { ...selectedItems };
-    if (field === "category") {
-      copySelectedItems.category = item;
+    if (field === "type") {
+      copySelectedItems.type = item;
     } else {
-      copySelectedItems.tag = item;
+      copySelectedItems.tags = item;
     }
 
     setSelectedItems((prev) => ({ ...prev, [field]: item }));
-
-    sortGoods(copySelectedItems.category, copySelectedItems.tag).then(
-        (goods) => {
-          setGoodsData(goods.data);
-        }
-      );
   };
 
   const clearFilters = () => {
-    setSelectedItems({ category: "", tag: "" });
-
-    getGoodsList().then((res) => {
-      setGoodsData(res.data);
-    });
+    setSelectedItems({ type: "", tags: "" });
   };
 
   return (
     <div className={classes.root}>
       <div className="category-menu">
-        <h4 className="category-menu_title">
-          Выберите свой идеальный букет
-        </h4>
+        <h4 className="category-menu_title">Выберите свой идеальный букет</h4>
         <Menu>
-          {sortItemsData?.categories.map((item, index) => (
+          {Object.values(Type).map((item, index) => (
             <Menu.Item
               key={index}
-              onClick={() => sortData("category", item)}
+              onClick={() =>
+                sortData(
+                  "type",
+                  Object.keys(Type)[Object.values(Type).indexOf(item)]
+                )
+              }
               className={classNames({
-                selected_category: item === selectedItems.category,
+                selected_category:
+                  Object.keys(Type)[Object.values(Type).indexOf(item)] ===
+                  selectedItems.type,
               })}
             >
               <span className="category-menu_item">{item}</span>
             </Menu.Item>
           ))}
         </Menu>
-        <TagItems
-          selectedTag={selectedItems.tag}
-          tagsData={sortItemsData?.tags}
-          sortData={sortData}
-          setGoodsData={setGoodsData}
-        />
-        <Button 
-          className="clearBtn" 
-          type="primary" 
-          onClick={clearFilters}
-        >
+        <TagItems selectedTag={selectedItems.tags} sortData={sortData} />
+        <Button className="clearBtn" type="primary" onClick={clearFilters}>
           Очистить
         </Button>
       </div>

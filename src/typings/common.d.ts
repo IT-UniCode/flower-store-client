@@ -21,8 +21,13 @@ declare interface IGoods {
   goodsImage: string;
 }
 
+declare interface ISelectedItems {
+  type: string;
+  tags: string;
+}
+
 declare interface ISortItems {
-  categories: string[];
+  type: string[];
   tags: string[];
 }
 

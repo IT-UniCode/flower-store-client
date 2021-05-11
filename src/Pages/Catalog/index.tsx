@@ -2,7 +2,8 @@ import React, { FC, useEffect, useState } from "react";
 import { withRouter } from "react-router";
 
 import CategoryMenu from "../../Components/CategoryMenu";
-import { getGoodsList } from "../../API/goods";
+import { goodsPagination } from "../../API/goods";
+import { QUANTITY_OF_PAGE_ITEMS } from "../../utils/consts";
 
 import GoodsList from "../../Components/GoodsList";
 
@@ -12,42 +13,43 @@ const Catalog: FC = () => {
   const classes = useStyles();
 
   const [goods, setGoods] = useState<IGoods[]>([]);
-  const [sortItems, setSortItems] = useState<ISortItems>();
+  const [selectedItems, setSelectedItems] = useState<ISelectedItems>({
+    type: "",
+    tags: "",
+  });
 
-  const fillingSortItems = (goods: IGoods[]) => {
-    let categoriesArray: string[] = [];
-    let tagsArray: string[] = [];
+  const [pageProps, setPageProps] = useState<IPage>({
+    quantityOfItems: goods.length,
+    currentPage: 1,
+    startIndex: 0,
+    endIndex: QUANTITY_OF_PAGE_ITEMS,
+  });
 
-    goods.forEach((item) => {
-      item.type.forEach((type: string) => {
-        if (!categoriesArray.includes(type)) {
-          categoriesArray.push(type);
-        }
-      });
-      item.tags.forEach((tag: string) => {
-        if (!tagsArray.includes(tag)) {
-          tagsArray.push(tag);
-        }
-      });
-    });
-
-    setSortItems({ categories: categoriesArray, tags: tagsArray });
-  };
-
-  useEffect(() => {
-    getGoodsList().then((res) => {
+  useEffect(() => {    
+    goodsPagination(
+      selectedItems.type,
+      selectedItems.tags,
+      pageProps.startIndex,
+      pageProps.endIndex
+    ).then((res) => {
       setGoods(res.data);
-      fillingSortItems(res.data);
     });
-  }, []);
-  
+  }, [selectedItems, pageProps]);
+
   return (
     <div className={classes.root}>
       <h2 className="page_title">Каталог букетов</h2>
 
       <div className="catalogue_wrapper">
-        <CategoryMenu sortItemsData={sortItems} setGoodsData={setGoods} />
-        <GoodsList goodsArray={goods} />
+        <CategoryMenu
+          selectedItems={selectedItems}
+          setSelectedItems={setSelectedItems}
+        />
+        <GoodsList
+          goodsArray={goods}
+          pageData={pageProps}
+          setPageData={setPageProps}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from "react";
+import React, { FC, useContext } from "react";
 import { Card, Button } from "antd";
 import { useHistory } from "react-router";
 
@@ -12,25 +12,20 @@ import { Operation } from "../../utils/consts";
 import { AppContext } from "../../Context";
 import { CountContext } from "../../Context/CountContext";
 import CustomPagination from "../../Components/CustomPagination";
-import { QUANTITY_OF_PAGE_ITEMS } from "../../utils/consts";
 
 import useStyles from "./style";
 interface GoodsListProps {
   goodsArray: IGoods[];
+  pageData: IPage;
+  setPageData: React.Dispatch<React.SetStateAction<IPage>>;
 }
 
-const GoodsList: FC<GoodsListProps> = ({ goodsArray }) => {
+const GoodsList: FC<GoodsListProps> = ({ goodsArray, pageData, setPageData }) => {
   const classes = useStyles();
   const history = useHistory();
 
   const { auth } = useContext(AppContext);
   const { count, setCount } = useContext(CountContext);
-  const [pageProps, setPageProps] = useState<IPage>({
-    quantityOfItems: goodsArray.length,
-    currentPage: 1,
-    startIndex: 0,
-    endIndex: QUANTITY_OF_PAGE_ITEMS,
-  });
 
   const buy = (goodsId: string) => {
     if (auth) {
@@ -62,13 +57,10 @@ const GoodsList: FC<GoodsListProps> = ({ goodsArray }) => {
     }
   };
 
-  const getPageItems = (start: number, end: number) =>
-    goodsArray.slice(start, end);
-
   return (
     <div className={classes.root}>
       <div className="goods_items">
-        {getPageItems(pageProps.startIndex, pageProps.endIndex).map(
+        {goodsArray.map(
           (item, index) => (
             <Card key={index}>
               <div className="goods_card-imgBlock">
@@ -93,8 +85,8 @@ const GoodsList: FC<GoodsListProps> = ({ goodsArray }) => {
       </div>
       <CustomPagination
         data={goodsArray}
-        pageProps={pageProps}
-        setPageProps={setPageProps}
+        pageData={pageData}
+        setPageData={setPageData}
       />
     </div>
   );
