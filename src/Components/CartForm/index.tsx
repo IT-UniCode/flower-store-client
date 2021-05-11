@@ -15,7 +15,7 @@ const { TextArea } = Input;
 
 const CartForm: FC<CartFormProps> = ({ data, setData }) => {
   const classes = useStyles();
-  const [status, setStatus] = useState(false);
+  const [basketStatus, setBasketStatus] = useState(false);
 
   const sendBasket = () => {
     if (data.address.length > 0) {
@@ -24,8 +24,9 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         comment: data.comment,
         price: data.price,
         orderDate: new Date(),
+        status: 'send',
       })
-      .then(() => setStatus(true));
+      .then(() => setBasketStatus(true));
     }
   };
   return (
@@ -55,7 +56,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         <Button className="order_btn" onClick={sendBasket}>
           Оформить заказ
         </Button>
-        {status && <Result status="success" title="Заказ принят" />}
+        {basketStatus && <Result status="success" title="Заказ отправлен" />}
       </div>
     </form>
   );
