@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { Button, Menu } from "antd";
 import classNames from "classnames";
 
-import { sortGoodsByAnd, sortGoodsByOr, getGoodsList } from "../../API/goods";
+import { sortGoods, getGoodsList } from "../../API/goods";
 import TagItems from "../TagItems";
 
 import useStyles from "./style";
@@ -37,19 +37,11 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
 
     setSelectedItems((prev) => ({ ...prev, [field]: item }));
 
-    if (copySelectedItems.category === "" || copySelectedItems.tag === "") {
-      sortGoodsByOr(copySelectedItems.category, copySelectedItems.tag).then(
+    sortGoods(copySelectedItems.category, copySelectedItems.tag).then(
         (goods) => {
           setGoodsData(goods.data);
         }
       );
-    } else {
-      sortGoodsByAnd(copySelectedItems.category, copySelectedItems.tag).then(
-        (goods) => {
-          setGoodsData(goods.data);
-        }
-      );
-    }
   };
 
   const clearFilters = () => {
