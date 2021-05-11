@@ -9,8 +9,8 @@ export const getGoodsByIdArray = (goodsIdArray: string[]) =>
     goodsIdArray,
   });
 
-export const sortGoods = (type: string, tags: string) =>
-  api.post("/goods/sort", {
+export const filterGoods = (type: string, tags: string) =>
+  api.post("/goods/filter", {
     type,
     tags,
   });

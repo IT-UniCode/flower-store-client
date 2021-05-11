@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 
 import CategoryMenu from '../../Components/CategoryMenu';
-import { getGoodsListPage, sortGoods } from '../../API/goods';
+import { getGoodsListPage, filterGoods } from '../../API/goods';
 import { QUANTITY_OF_PAGE_ITEMS } from '../../utils/consts';
 
 import GoodsList from '../../Components/GoodsList';
@@ -36,7 +36,7 @@ const Catalog: FC = () => {
   }, [selectedItems, pageProps.startIndex, pageProps.endIndex]);
 
   useEffect(() => {
-    sortGoods(selectedItems.type, selectedItems.tags).then((res) => {
+    filterGoods(selectedItems.type, selectedItems.tags).then((res) => {
       setPageProps((prev) => {
         const data = { ...prev };
 
