@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import { Card, Button } from "antd";
 import { useHistory } from "react-router";
 

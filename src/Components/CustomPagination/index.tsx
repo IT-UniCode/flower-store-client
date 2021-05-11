@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { Pagination } from "antd";
 
 import { QUANTITY_OF_PAGE_ITEMS } from "../../utils/consts";
