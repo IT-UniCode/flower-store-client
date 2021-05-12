@@ -1,15 +1,15 @@
-import React, { useState, useContext } from "react";
-import { Form, Input, Button } from "antd";
-import { Link, useHistory, withRouter } from "react-router-dom";
+import React, { useState, useContext } from 'react';
+import { Form, Input, Button } from 'antd';
+import { Link, useHistory, withRouter } from 'react-router-dom';
 
-import { signin } from "../../API/user";
-import { getBasketByUserId } from "../../API/basket";
-import { AppContext } from "../../Context";
-import { CountContext } from "../../Context/CountContext";
+import { signin } from '../../API/user';
+import { getBasketByUserId } from '../../API/basket';
+import { AppContext } from '../../Context';
+import { CountContext } from '../../Context/CountContext';
 import jwtDecode from 'jwt-decode';
 
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import useStyles from "./style";
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import useStyles from './style';
 interface IUser {
   email: string;
   password: string;
@@ -23,28 +23,35 @@ const SignIn = () => {
   const { setCount } = useContext(CountContext);
 
   const [user, setUser] = useState<IUser>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const login = () => {
     signin(user)
       .then((res) => {
         const decode: any = jwtDecode(res.data.token);
-        localStorage.setItem("jwt", res.data.token);
-        localStorage.setItem("userId", decode._id);
-        localStorage.setItem("role", decode.role);
+        localStorage.setItem('jwt', res.data.token);
+        localStorage.setItem('userId', decode._id);
+        localStorage.setItem('role', decode.role);
 
-        getBasketByUserId(decode._id)
-          .then(async (basket) => {
-            const count = await basket.data[0].goods.reduce((sum: number, curr: any) => {
-              return sum += curr.count;
-            }, 0)            
-            setCount(count);
-          })
+        getBasketByUserId(decode._id).then(async (basket) => {
+          let count: number = 0;
+
+          if (basket) {
+            count = await basket.data[0].goods.reduce(
+              (sum: number, curr: any) => {
+                return (sum += curr.count);
+              },
+              0
+            );
+          }
+
+          setCount(count);
+        });
 
         setAuth(true);
-        history.push('/account')
+        history.push('/account');
       })
       .catch((error) => console.log(`Error: ${error}`));
   };
@@ -54,13 +61,13 @@ const SignIn = () => {
       <div className="signInForm_wrapper">
         <Form name="nest-messages" className="signInForm">
           <Form.Item
-            name={["user", "email"]}
+            name={['user', 'email']}
             label="Email"
             rules={[
               {
-                type: "email",
+                type: 'email',
                 required: true,
-                message: "Please input correct email!",
+                message: 'Please input correct email!',
               },
             ]}
           >
@@ -75,9 +82,9 @@ const SignIn = () => {
           </Form.Item>
           <Form.Item>
             <Form.Item
-              name={["user", "password"]}
+              name={['user', 'password']}
               label="Пароль"
-              rules={[{ required: true, message: "Please input password!" }]}
+              rules={[{ required: true, message: 'Please input password!' }]}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}

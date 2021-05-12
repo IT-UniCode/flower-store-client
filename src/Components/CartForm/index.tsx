@@ -1,6 +1,7 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useContext } from "react";
 import classNames from "classnames";
 
+import {CountContext} from '../../Context/CountContext';
 import { Input, Button, Result } from "antd";
 import { confirmBasket } from "../../API/basket";
 
@@ -16,6 +17,7 @@ const { TextArea } = Input;
 const CartForm: FC<CartFormProps> = ({ data, setData }) => {
   const classes = useStyles();
   const [basketStatus, setBasketStatus] = useState(false);
+  const {count} = useContext(CountContext);
 
   const sendBasket = () => {
     if (data.address.length > 0) {
@@ -52,8 +54,14 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         />
       </div>
       <div className="order_inner">
-        <p className="order_total-price">Общая стоимость {data.price} ₴</p>
-        <Button className="order_btn" onClick={sendBasket}>
+        <p className="order_total-price">
+          Общая стоимость {data.price} ₴
+        </p>
+        <Button 
+          className="order_btn"
+          onClick={sendBasket}
+          disabled={count === 0}
+        >
           Оформить заказ
         </Button>
         {basketStatus && <Result status="success" title="Заказ отправлен" />}
