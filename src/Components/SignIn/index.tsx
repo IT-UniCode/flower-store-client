@@ -5,7 +5,6 @@ import { Link, useHistory, withRouter } from 'react-router-dom';
 import { signin } from '../../API/user';
 import { getBasketByUserId } from '../../API/basket';
 import { AppContext } from '../../Context';
-import { CountContext } from '../../Context/CountContext';
 import jwtDecode from 'jwt-decode';
 
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
@@ -19,8 +18,7 @@ const SignIn = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { setAuth } = useContext(AppContext);
-  const { setCount } = useContext(CountContext);
+  const { setUserContext } = useContext(AppContext);
 
   const [user, setUser] = useState<IUser>({
     email: '',
@@ -33,12 +31,11 @@ const SignIn = () => {
         const decode: any = jwtDecode(res.data.token);
         localStorage.setItem('jwt', res.data.token);
         localStorage.setItem('userId', decode._id);
-        localStorage.setItem('role', decode.role);
 
         getBasketByUserId(decode._id).then(async (basket) => {
           let count: number = 0;
-
-          if (basket) {
+          
+          if (basket.data.length !== 0) {
             count = await basket.data[0].goods.reduce(
               (sum: number, curr: any) => {
                 return (sum += curr.count);
@@ -47,10 +44,9 @@ const SignIn = () => {
             );
           }
 
-          setCount(count);
+          setUserContext({phone: '', address: '', role: decode.role, goodsCount: count, auth: true});
         });
 
-        setAuth(true);
         history.push('/account');
       })
       .catch((error) => console.log(`Error: ${error}`));

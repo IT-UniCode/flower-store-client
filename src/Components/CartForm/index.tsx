@@ -1,7 +1,7 @@
 import React, { FC, useState, useContext } from "react";
 import classNames from "classnames";
 
-import {CountContext} from '../../Context/CountContext';
+import { AppContext } from '../../Context';
 import { Input, Button, Result } from "antd";
 import { confirmBasket } from "../../API/basket";
 
@@ -17,11 +17,12 @@ const { TextArea } = Input;
 const CartForm: FC<CartFormProps> = ({ data, setData }) => {
   const classes = useStyles();
   const [basketStatus, setBasketStatus] = useState(false);
-  const {count} = useContext(CountContext);
+  const {userContext} = useContext(AppContext);
 
   const sendBasket = () => {
     if (data.address.length > 0) {
       confirmBasket(localStorage.userId, {
+        phone: data.phone,
         address: data.address,
         comment: data.comment,
         price: data.price,
@@ -34,6 +35,15 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
   return (
     <form className={classes.root}>
       <div>
+        <label>Укажите телефон</label>
+        <Input
+          value={data.phone}
+          placeholder="Введите номер телефона"
+          className={classNames({ check_address: data.address.length === 0 })}
+          onChange={(e) =>
+            setData((prev) => ({ ...prev, phone: e.target.value }))
+          }
+        />
         <label>Укажите адрес доставки</label>
         <Input
           value={data.address}
@@ -60,7 +70,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         <Button 
           className="order_btn"
           onClick={sendBasket}
-          disabled={count === 0}
+          disabled={userContext.goodsCount === 0}
         >
           Оформить заказ
         </Button>

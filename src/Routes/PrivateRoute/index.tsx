@@ -10,13 +10,13 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: FC<PrivateRouteProps> = ({ children, ...props }) => {
-  const { auth,  } = useContext(AppContext);
+  const { userContext  } = useContext(AppContext);
 
-  if (auth === null) {
+  if (userContext.auth === null) {
     return <div>Loading...</div>;
   }
 
-  if (auth) {
+  if (userContext.auth) {
     return <Route {...props}>{children}</Route>;
   }
   return <Redirect to="/signin" />;

@@ -32,6 +32,7 @@ declare interface IFilterItems {
 }
 
 declare interface IClientBasket {
+  phone: string;
   price: number;
   comment: string;
   address: string;

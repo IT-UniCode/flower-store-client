@@ -1,29 +1,45 @@
 import React, { createContext, useState } from 'react';
 
-interface IInitialContex {
-  auth: boolean | null;
-  setAuth: (v: boolean | null) => void;
+interface IUserContext {
+  auth: boolean;
+  goodsCount: number;
+  phone: string;
+  address: string;
+  role: string;
 }
 
-interface AppProviderProps {
+interface IInitialContext {
+  userContext: IUserContext;
+  setUserContext: (userContext: IUserContext) => void;
+}
+
+interface UserProviderProps {
   children: React.ReactNode;
-};
+}
 
 const initialState = {
-  auth: false,
-  setAuth: (v: boolean | null) => v,
+  userContext: {
+    auth: false,
+    goodsCount: 0,
+    phone: '',
+    address: '',
+    role: '',
+  },
+  setUserContext: (userContext: IUserContext) => userContext,
 };
 
-export const AppContext = createContext<IInitialContex>(initialState);
+export const AppContext = createContext<IInitialContext>(initialState);
 
-const AppProvider = ({ children }: AppProviderProps) => {
-  const [auth, setAuth] = useState<boolean | null>(initialState.auth);
+const AppProvider = ({ children }: UserProviderProps) => {
+  const [userContext, setUserContext] = useState<IUserContext>(
+    initialState.userContext
+  );
 
   return (
-    <AppContext.Provider value={{ auth, setAuth}}>
+    <AppContext.Provider value={{ userContext, setUserContext }}>
       {children}
     </AppContext.Provider>
   );
-}
+};
 
 export default AppProvider;

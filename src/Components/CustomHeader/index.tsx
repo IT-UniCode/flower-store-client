@@ -4,7 +4,6 @@ import { Link, useHistory, withRouter } from "react-router-dom";
 
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import { AppContext } from "../../Context";
-import { CountContext } from "../../Context/CountContext";
 import logo_img from "../../assets/img/poppy-flower.png";
 
 import useStyles from "./style";
@@ -16,8 +15,7 @@ const CustomHeader: FC = () => {
   const history = useHistory();
 
   const [path, setPath] = useState(["/"]);
-  const { auth } = useContext(AppContext);
-  const { count } = useContext(CountContext);
+  const { userContext } = useContext(AppContext);
 
   useEffect(() => {
     setPath([`${history.location.pathname}`]);
@@ -42,14 +40,14 @@ const CustomHeader: FC = () => {
               Каталог
             </Link>
           </Menu.Item>
-          { localStorage.role === 'ADMIN' &&
+          { userContext.role === 'ADMIN' &&
           <Menu.Item key="/admin-page">
             <Link to="/admin-page" className="menu_link">
               Admin
             </Link>
           </Menu.Item>}
             <Menu.Item key="/cart" className="menu_item_right menu_item_cart">
-          <Badge count={count}>
+          <Badge count={userContext.goodsCount}>
               <Link to="/cart" className="menu_link">
                 <Button icon={<ShoppingCartOutlined />} className="cart_btn" />
               </Link>
@@ -57,7 +55,7 @@ const CustomHeader: FC = () => {
             </Menu.Item>
           <Menu.Item key="/account" className="menu_item_right">
             <Link to="/account" className="menu_link">
-              {auth ? "Кабинет" : "Войти"}
+              {userContext.auth ? "Кабинет" : "Войти"}
             </Link>
           </Menu.Item>
         </Menu>

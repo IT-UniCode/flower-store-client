@@ -1,15 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { AppContext } from "../../Context";
-import { CountContext } from "../../Context/CountContext";
 import { getUserById } from "../../API/user";
 
 import useStyles from "./style";
 
 const Account = () => {
   const classes = useStyles();
-  const { setAuth } = useContext(AppContext);
-  const { setCount } = useContext(CountContext);
+  const { setUserContext} = useContext(AppContext);
   
   const [user, setUser] = useState<IUser>({
     name: "",
@@ -24,9 +22,7 @@ const Account = () => {
   });
 
   useEffect(() => {
-    getUserById(localStorage.userId).then((res) => {
-      localStorage.setItem("address", res.data.address);
-      
+    getUserById(localStorage.userId).then((res) => {      
       setUser({
         name: res.data.name,
         surname: res.data.surname,
@@ -43,8 +39,7 @@ const Account = () => {
 
   const logout = () => {
     localStorage.clear();
-    setAuth(false);
-    setCount(0);
+    setUserContext({phone: '', address: '', auth: false, role: '', goodsCount: 0});
   };
 
   return (

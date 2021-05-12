@@ -14,14 +14,16 @@ import { getGoodsByIdArray } from '../../API/goods';
 import CartForm from '../../Components/CartForm';
 import { Button, List } from 'antd';
 import { Operation } from '../../utils/consts';
-import { CountContext } from '../../Context/CountContext';
+import { AppContext } from '../../Context';
+import jwtDecode from 'jwt-decode';
 
 import useStyles from './style';
 
 const Cart: FC = () => {
   const classes = useStyles();
-  const { count, setCount } = useContext(CountContext);
+  const { userContext, setUserContext } = useContext(AppContext);
   const [basket, setBasket] = useState<IClientBasket>({
+    phone: localStorage.phone,
     price: 0,
     comment: '',
     address: localStorage.address,
@@ -37,13 +39,26 @@ const Cart: FC = () => {
       setBasket(copyBasket);
       updateGoodsOnBasket(localStorage.userId, goodsId, op);
 
-      setCount(count + Number(op + 1));
+      setUserContext({
+        goodsCount: userContext.goodsCount + Number(op + 1),
+        phone: userContext.phone,
+        address: userContext.address,
+        role: userContext.role,
+        auth: userContext.auth,
+      });
     }
   };
 
   const deleteGoods = (startId: number, goodsId: string) => {
     const copyBasket = { ...basket };
-    setCount(count - copyBasket.goods[startId].count);
+
+    setUserContext({
+      goodsCount: userContext.goodsCount - copyBasket.goods[startId].count,
+      phone: userContext.phone,
+      address: userContext.address,
+      role: userContext.role,
+      auth: userContext.auth,
+    });
 
     delGoodsFromBasket(localStorage.userId, goodsId)
       .then(() => {
@@ -87,12 +102,15 @@ const Cart: FC = () => {
   };
 
   useEffect(() => {
+    const decode: any = jwtDecode(localStorage.jwt);
+
     getBasketByUserId(localStorage.userId)
       .then(async (serverBasket) => {
         const clientBasket: IClientBasket = {
+          phone: decode.phone,
           price: 0,
           comment: '',
-          address: localStorage.address,
+          address: decode.address,
           orderDate: new Date(),
           goods: [],
         };

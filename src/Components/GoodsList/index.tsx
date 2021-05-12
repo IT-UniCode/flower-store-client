@@ -1,34 +1,36 @@
-import React, { FC, useContext } from "react";
-import { Card, Button } from "antd";
-import { useHistory } from "react-router";
+import React, { FC, useContext } from 'react';
+import { Card, Button } from 'antd';
+import { useHistory } from 'react-router';
 
-import DescPopover from "../../Components/DescPopover";
+import DescPopover from '../../Components/DescPopover';
 import {
   createBasket,
   getBasketByUserId,
   updateGoodsOnBasket,
-} from "../../API/basket";
-import { Operation } from "../../utils/consts";
-import { AppContext } from "../../Context";
-import { CountContext } from "../../Context/CountContext";
-import CustomPagination from "../../Components/CustomPagination";
+} from '../../API/basket';
+import { Operation } from '../../utils/consts';
+import { AppContext } from '../../Context';
+import CustomPagination from '../../Components/CustomPagination';
 
-import useStyles from "./style";
+import useStyles from './style';
 interface GoodsListProps {
   goodsArray: IGoods[];
   pageData: IPage;
   setPageData: React.Dispatch<React.SetStateAction<IPage>>;
 }
 
-const GoodsList: FC<GoodsListProps> = ({ goodsArray, pageData, setPageData }) => {
+const GoodsList: FC<GoodsListProps> = ({
+  goodsArray,
+  pageData,
+  setPageData,
+}) => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { auth } = useContext(AppContext);
-  const { count, setCount } = useContext(CountContext);
+  const { userContext, setUserContext } = useContext(AppContext);
 
   const buy = (goodsId: string) => {
-    if (auth) {
+    if (userContext.auth) {
       getBasketByUserId(localStorage.userId)
         .then((res) => {
           if (res.data.length > 0) {
@@ -51,42 +53,43 @@ const GoodsList: FC<GoodsListProps> = ({ goodsArray, pageData, setPageData }) =>
         })
         .catch((error) => console.log(error));
 
-      setCount(count + 1);
+      setUserContext({
+        goodsCount: userContext.goodsCount + 1,
+        phone: userContext.phone,
+        address: userContext.address,
+        role: userContext.role,
+        auth: userContext.auth,
+      });
     } else {
-      history.push("/signin");
+      history.push('/signin');
     }
   };
 
   return (
     <div className={classes.root}>
       <div className="goods_items">
-        {goodsArray.map(
-          (item, index) => (
-            <Card key={index}>
-              <div className="goods_card-imgBlock">
-                <img
-                  className="goods_card-img"
-                  alt="bouquet"
-                  src={item.goodsImage}
-                />
-              </div>
-              <DescPopover
-                title={item.name}
-                desc={item.description}
-                checkId={item._id}
+        {goodsArray.map((item, index) => (
+          <Card key={index}>
+            <div className="goods_card-imgBlock">
+              <img
+                className="goods_card-img"
+                alt="bouquet"
+                src={item.goodsImage}
               />
-              <p className="goods_card-price">{item.price} ₴</p>
-              <Button className="goods_card-btn" onClick={() => buy(item._id)}>
-                Заказать
-              </Button>
-            </Card>
-          )
-        )}
+            </div>
+            <DescPopover
+              title={item.name}
+              desc={item.description}
+              checkId={item._id}
+            />
+            <p className="goods_card-price">{item.price} ₴</p>
+            <Button className="goods_card-btn" onClick={() => buy(item._id)}>
+              Заказать
+            </Button>
+          </Card>
+        ))}
       </div>
-      <CustomPagination
-        pageData={pageData}
-        setPageData={setPageData}
-      />
+      <CustomPagination pageData={pageData} setPageData={setPageData} />
     </div>
   );
 };
