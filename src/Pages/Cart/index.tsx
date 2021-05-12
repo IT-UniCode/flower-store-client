@@ -23,10 +23,10 @@ const Cart: FC = () => {
   const { userContext, setUserContext } = useContext(AppContext);
 
   const [basket, setBasket] = useState<IClientBasket>({
-    phone: '',
+    phone: userContext.phone,
     price: 0,
     comment: '',
-    address: '',
+    address: userContext.address,
     orderDate: new Date(),
     goods: [],
   });

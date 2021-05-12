@@ -6,9 +6,11 @@ export const getBasketById = (basketId: string) =>
 export const getBasketByUserId = (userId: string) =>
   api.get(`/basket/user/${userId}`);
 
-export const createBasket = (userId: string, address: string) =>
+export const createBasket = (userId: string, address: string, phone: string, fullName: string) =>
   api.post(`/basket/create/${userId}`, {
     address,
+    phone,
+    fullName,
   });
 
 export const updateGoodsOnBasket = (

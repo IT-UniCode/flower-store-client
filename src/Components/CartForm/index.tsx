@@ -1,11 +1,11 @@
-import React, { FC, useState, useContext } from "react";
-import classNames from "classnames";
+import React, { FC, useState, useContext } from 'react';
+import classNames from 'classnames';
 
 import { AppContext } from '../../Context';
-import { Input, Button, Result } from "antd";
-import { confirmBasket } from "../../API/basket";
+import { Input, Button, Result } from 'antd';
+import { confirmBasket } from '../../API/basket';
 
-import useStyles from "./style";
+import useStyles from './style';
 
 interface CartFormProps {
   data: IClientBasket;
@@ -17,22 +17,36 @@ const { TextArea } = Input;
 const CartForm: FC<CartFormProps> = ({ data, setData }) => {
   const classes = useStyles();
   const [basketStatus, setBasketStatus] = useState(false);
-  const {userContext} = useContext(AppContext);
+  const { userContext, setUserContext } = useContext(AppContext);
 
   const sendBasket = () => {
     if (data.address.length > 0) {
-      confirmBasket(localStorage.userId, {
+      confirmBasket(userContext.userId, {
+        fullName: `${userContext.userSurName} ${userContext.userName} ${userContext.userLastName}`,
         phone: data.phone,
         address: data.address,
         comment: data.comment,
         price: data.price,
         orderDate: new Date(),
         status: 'send',
-      })
-      .then(() => setBasketStatus(true));
+      }).then(() => {
+        setUserContext({
+          goodsCount: 0,
+          phone: userContext.phone,
+          address: userContext.address,
+          role: userContext.role,
+          auth: userContext.auth,
+          userId: userContext.userId,
+          userName: userContext.userName,
+          userSurName: userContext.userSurName,
+          userLastName: userContext.userLastName,
+        });
+
+        setBasketStatus(true);
+      });
     }
   };
-  
+
   return (
     <form className={classes.root}>
       <div>
@@ -48,7 +62,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         <Input
           value={data.address}
           placeholder="Введите адрес доставки"
-          className={classNames({ 'check_address': data.address.length === 0 })}
+          className={classNames({ check_address: data.address.length === 0 })}
           onChange={(e) =>
             setData((prev) => ({ ...prev, address: e.target.value }))
           }
@@ -64,10 +78,8 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         />
       </div>
       <div className="order_inner">
-        <p className="order_total-price">
-          Общая стоимость {data.price} ₴
-        </p>
-        <Button 
+        <p className="order_total-price">Общая стоимость {data.price} ₴</p>
+        <Button
           className="order_btn"
           onClick={sendBasket}
           disabled={userContext.goodsCount === 0}

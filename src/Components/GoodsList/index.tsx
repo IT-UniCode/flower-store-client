@@ -40,7 +40,12 @@ const GoodsList: FC<GoodsListProps> = ({
               Operation.plus
             ).catch((error) => console.log(error));
           } else {
-            createBasket(userContext.userId, userContext.address)
+            createBasket(
+              userContext.userId,
+              userContext.address,
+              userContext.phone,
+              `${userContext.userSurName} ${userContext.userName} ${userContext.userLastName}`
+            )
               .then(() => {
                 updateGoodsOnBasket(
                   userContext.userId,
