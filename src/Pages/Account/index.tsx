@@ -21,34 +21,6 @@ const Account = () => {
     basketId: '',
   });
 
-  useEffect(() => {
-    getUserById(userContext.userId).then((res) => {
-      setUser({
-        name: res.data.name,
-        surname: res.data.surname,
-        lastname: res.data.lastname,
-        phone: res.data.phone,
-        address: res.data.address,
-        email: res.data.email,
-        password: '',
-        checkPass: '',
-        basketId: '',
-      });
-
-      setUserContext({
-        userName: res.data.name,
-        userSurName: res.data.surname,
-        userLastName: res.data.lastname,
-        phone: res.data.phone,
-        address: res.data.address,
-        userId: userContext.userId,
-        role: userContext.role,
-        auth: userContext.auth,
-        goodsCount: userContext.goodsCount,
-      });
-    });
-  }, []);
-
   const logout = () => {
     localStorage.clear();
 
@@ -64,6 +36,22 @@ const Account = () => {
       role: '',
     });
   };
+
+  useEffect(() => {
+    getUserById(userContext.userId).then((res) => {
+      setUser({
+        name: res.data.name,
+        surname: res.data.surname,
+        lastname: res.data.lastname,
+        phone: res.data.phone,
+        address: res.data.address,
+        email: res.data.email,
+        password: '',
+        checkPass: '',
+        basketId: '',
+      });
+    });
+  }, [userContext.userId]);
 
   return (
     <div className={classes.root}>

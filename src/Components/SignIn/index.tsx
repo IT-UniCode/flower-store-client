@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Form, Input, Button } from 'antd';
 import { Link, useHistory, withRouter } from 'react-router-dom';
 
-import { signin } from '../../API/user';
+import { signin, getUserById } from '../../API/user';
 import { getBasketByUserId } from '../../API/basket';
 import { AppContext } from '../../Context';
 import jwtDecode from 'jwt-decode';
@@ -43,16 +43,18 @@ const SignIn = () => {
             );
           }
 
-          setUserContext({
-            userId: decode._id,
-            userName: '',
-            userSurName: '',
-            userLastName: '',
-            phone: '',
-            address: '',
-            role: decode.role,
-            goodsCount: count,
-            auth: true,
+          await getUserById(decode._id).then((res) => {
+            setUserContext({
+              userId: decode._id,
+              userName: res.data.name,
+              userSurName: res.data.surname,
+              userLastName: res.data.lastname,
+              phone: res.data.phone,
+              address: res.data.address,
+              role: decode.role,
+              goodsCount: count,
+              auth: true,
+            });
           });
         });
 
