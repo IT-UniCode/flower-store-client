@@ -9,6 +9,7 @@ interface IUserContext {
   userLastName: string;
   phone: string;
   address: string;
+  email: string;
   role: string;
 }
 
@@ -31,6 +32,7 @@ const initialState = {
     userLastName: '',
     phone: '',
     address: '',
+    email: '',
     role: '',
   },
   setUserContext: (userContext: IUserContext) => userContext,

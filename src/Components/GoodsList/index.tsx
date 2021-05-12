@@ -64,6 +64,7 @@ const GoodsList: FC<GoodsListProps> = ({
         address: userContext.address,
         role: userContext.role,
         auth: userContext.auth,
+        email: userContext.email,
         userId: userContext.userId,
         userName: userContext.userName,
         userSurName: userContext.userSurName,

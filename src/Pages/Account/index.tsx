@@ -31,6 +31,7 @@ const Account = () => {
       userName: '',
       userSurName: '',
       userLastName: '',
+      email: '',
       phone: '',
       address: '',
       role: '',

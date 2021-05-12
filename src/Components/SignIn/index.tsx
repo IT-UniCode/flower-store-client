@@ -18,7 +18,7 @@ const SignIn = () => {
   const classes = useStyles();
   const history = useHistory();
 
-  const { setUserContext } = useContext(AppContext);
+  const { userContext, setUserContext } = useContext(AppContext);
 
   const [user, setUser] = useState<IUser>({
     email: '',
@@ -46,6 +46,7 @@ const SignIn = () => {
           await getUserById(decode._id).then((res) => {
             setUserContext({
               userId: decode._id,
+              email: res.data.email,
               userName: res.data.name,
               userSurName: res.data.surname,
               userLastName: res.data.lastname,

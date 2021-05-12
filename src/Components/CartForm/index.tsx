@@ -28,6 +28,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         comment: data.comment,
         price: data.price,
         orderDate: new Date(),
+        email: userContext.email,
         status: 'send',
       }).then(() => {
         setUserContext({
@@ -36,6 +37,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
           address: userContext.address,
           role: userContext.role,
           auth: userContext.auth,
+          email: userContext.email,
           userId: userContext.userId,
           userName: userContext.userName,
           userSurName: userContext.userSurName,
