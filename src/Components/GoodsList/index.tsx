@@ -31,19 +31,19 @@ const GoodsList: FC<GoodsListProps> = ({
 
   const buy = (goodsId: string) => {
     if (userContext.auth) {
-      getBasketByUserId(localStorage.userId)
+      getBasketByUserId(userContext.userId)
         .then((res) => {
           if (res.data.length > 0) {
             updateGoodsOnBasket(
-              localStorage.userId,
+              userContext.userId,
               goodsId,
               Operation.plus
             ).catch((error) => console.log(error));
           } else {
-            createBasket(localStorage.userId, localStorage.address)
+            createBasket(userContext.userId, userContext.address)
               .then(() => {
                 updateGoodsOnBasket(
-                  localStorage.userId,
+                  userContext.userId,
                   goodsId,
                   Operation.plus
                 ).catch((error) => console.log(error));
@@ -59,6 +59,10 @@ const GoodsList: FC<GoodsListProps> = ({
         address: userContext.address,
         role: userContext.role,
         auth: userContext.auth,
+        userId: userContext.userId,
+        userName: userContext.userName,
+        userSurName: userContext.userSurName,
+        userLastName: userContext.userLastName,
       });
     } else {
       history.push('/signin');

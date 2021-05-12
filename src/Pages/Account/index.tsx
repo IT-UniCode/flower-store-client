@@ -1,28 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from 'react';
 
-import { AppContext } from "../../Context";
-import { getUserById } from "../../API/user";
+import { AppContext } from '../../Context';
+import { getUserById } from '../../API/user';
 
-import useStyles from "./style";
+import useStyles from './style';
 
 const Account = () => {
   const classes = useStyles();
-  const { setUserContext} = useContext(AppContext);
-  
+  const { userContext, setUserContext } = useContext(AppContext);
+
   const [user, setUser] = useState<IUser>({
-    name: "",
-    surname: "",
-    lastname: "",
-    phone: "",
-    address: "",
-    email: "",
-    password: "",
-    checkPass: "",
+    name: '',
+    surname: '',
+    lastname: '',
+    phone: '',
+    address: '',
+    email: '',
+    password: '',
+    checkPass: '',
     basketId: '',
   });
 
   useEffect(() => {
-    getUserById(localStorage.userId).then((res) => {      
+    getUserById(userContext.userId).then((res) => {
       setUser({
         name: res.data.name,
         surname: res.data.surname,
@@ -30,16 +30,39 @@ const Account = () => {
         phone: res.data.phone,
         address: res.data.address,
         email: res.data.email,
-        password: "",
-        checkPass: "",
+        password: '',
+        checkPass: '',
         basketId: '',
+      });
+
+      setUserContext({
+        userName: res.data.name,
+        userSurName: res.data.surname,
+        userLastName: res.data.lastname,
+        phone: res.data.phone,
+        address: res.data.address,
+        userId: userContext.userId,
+        role: userContext.role,
+        auth: userContext.auth,
+        goodsCount: userContext.goodsCount,
       });
     });
   }, []);
 
   const logout = () => {
     localStorage.clear();
-    setUserContext({phone: '', address: '', auth: false, role: '', goodsCount: 0});
+
+    setUserContext({
+      auth: false,
+      goodsCount: 0,
+      userId: '',
+      userName: '',
+      userSurName: '',
+      userLastName: '',
+      phone: '',
+      address: '',
+      role: '',
+    });
   };
 
   return (

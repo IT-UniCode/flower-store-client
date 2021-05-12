@@ -3,6 +3,10 @@ import React, { createContext, useState } from 'react';
 interface IUserContext {
   auth: boolean;
   goodsCount: number;
+  userId: string;
+  userName: string;
+  userSurName: string;
+  userLastName: string;
   phone: string;
   address: string;
   role: string;
@@ -21,6 +25,10 @@ const initialState = {
   userContext: {
     auth: false,
     goodsCount: 0,
+    userId: '',
+    userName: '',
+    userSurName: '',
+    userLastName: '',
     phone: '',
     address: '',
     role: '',

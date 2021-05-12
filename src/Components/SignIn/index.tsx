@@ -27,14 +27,13 @@ const SignIn = () => {
 
   const login = () => {
     signin(user)
-      .then((res) => {
+      .then(async (res) => {
         const decode: any = jwtDecode(res.data.token);
         localStorage.setItem('jwt', res.data.token);
-        localStorage.setItem('userId', decode._id);
 
-        getBasketByUserId(decode._id).then(async (basket) => {
+        await getBasketByUserId(decode._id).then(async (basket) => {
           let count: number = 0;
-          
+
           if (basket.data.length !== 0) {
             count = await basket.data[0].goods.reduce(
               (sum: number, curr: any) => {
@@ -44,7 +43,17 @@ const SignIn = () => {
             );
           }
 
-          setUserContext({phone: '', address: '', role: decode.role, goodsCount: count, auth: true});
+          setUserContext({
+            userId: decode._id,
+            userName: '',
+            userSurName: '',
+            userLastName: '',
+            phone: '',
+            address: '',
+            role: decode.role,
+            goodsCount: count,
+            auth: true,
+          });
         });
 
         history.push('/account');

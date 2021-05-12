@@ -58,15 +58,8 @@ const CategoryMenu: FC<CategoryMenuProps> = ({
             </Menu.Item>
           ))}
         </Menu>
-        <TagItems 
-          selectedTag={selectedItems.tags}
-          sortData={filterData}
-        />
-        <Button 
-          className="clearBtn"
-          type="primary"
-          onClick={clearFilters}
-        >
+        <TagItems selectedTag={selectedItems.tags} sortData={filterData} />
+        <Button className="clearBtn" type="primary" onClick={clearFilters}>
           Очистить
         </Button>
       </div>

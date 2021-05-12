@@ -15,18 +15,18 @@ import CartForm from '../../Components/CartForm';
 import { Button, List } from 'antd';
 import { Operation } from '../../utils/consts';
 import { AppContext } from '../../Context';
-import jwtDecode from 'jwt-decode';
 
 import useStyles from './style';
 
 const Cart: FC = () => {
   const classes = useStyles();
   const { userContext, setUserContext } = useContext(AppContext);
+
   const [basket, setBasket] = useState<IClientBasket>({
-    phone: localStorage.phone,
+    phone: '',
     price: 0,
     comment: '',
-    address: localStorage.address,
+    address: '',
     orderDate: new Date(),
     goods: [],
   });
@@ -37,7 +37,7 @@ const Cart: FC = () => {
       copyBasket.goods[index].count += Number(op + 1);
       copyBasket.price += Number(op + copyBasket.goods[index].goods.price);
       setBasket(copyBasket);
-      updateGoodsOnBasket(localStorage.userId, goodsId, op);
+      updateGoodsOnBasket(userContext.userId, goodsId, op);
 
       setUserContext({
         goodsCount: userContext.goodsCount + Number(op + 1),
@@ -45,6 +45,10 @@ const Cart: FC = () => {
         address: userContext.address,
         role: userContext.role,
         auth: userContext.auth,
+        userId: userContext.userId,
+        userName: userContext.userName,
+        userSurName: userContext.userSurName,
+        userLastName: userContext.userLastName,
       });
     }
   };
@@ -58,9 +62,13 @@ const Cart: FC = () => {
       address: userContext.address,
       role: userContext.role,
       auth: userContext.auth,
+      userId: userContext.userId,
+      userName: userContext.userName,
+      userSurName: userContext.userSurName,
+      userLastName: userContext.userLastName,
     });
 
-    delGoodsFromBasket(localStorage.userId, goodsId)
+    delGoodsFromBasket(userContext.userId, goodsId)
       .then(() => {
         copyBasket.price -=
           copyBasket.goods[startId].goods.price *
@@ -102,15 +110,13 @@ const Cart: FC = () => {
   };
 
   useEffect(() => {
-    const decode: any = jwtDecode(localStorage.jwt);
-
-    getBasketByUserId(localStorage.userId)
+    getBasketByUserId(userContext.userId)
       .then(async (serverBasket) => {
         const clientBasket: IClientBasket = {
-          phone: decode.phone,
+          phone: userContext.phone,
           price: 0,
           comment: '',
-          address: decode.address,
+          address: userContext.address,
           orderDate: new Date(),
           goods: [],
         };

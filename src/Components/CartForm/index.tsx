@@ -32,6 +32,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
       .then(() => setBasketStatus(true));
     }
   };
+  
   return (
     <form className={classes.root}>
       <div>
@@ -39,7 +40,6 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         <Input
           value={data.phone}
           placeholder="Введите номер телефона"
-          className={classNames({ check_address: data.address.length === 0 })}
           onChange={(e) =>
             setData((prev) => ({ ...prev, phone: e.target.value }))
           }
@@ -48,7 +48,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         <Input
           value={data.address}
           placeholder="Введите адрес доставки"
-          className={classNames({ check_address: data.address.length === 0 })}
+          className={classNames({ 'check_address': data.address.length === 0 })}
           onChange={(e) =>
             setData((prev) => ({ ...prev, address: e.target.value }))
           }
