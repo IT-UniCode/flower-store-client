@@ -88,7 +88,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         >
           Оформить заказ
         </Button>
-        {basketStatus && <Result status="success" title="Заказ отправлен" />}
+        {basketStatus && <Result status="success" title="Заказ отправлен менеджеру" />}
       </div>
     </form>
   );

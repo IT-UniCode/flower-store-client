@@ -1,4 +1,4 @@
-import api from "./config";
+import api from './config';
 
 export const getBasketById = (basketId: string) =>
   api.get(`/basket/${basketId}`);
@@ -6,7 +6,12 @@ export const getBasketById = (basketId: string) =>
 export const getBasketByUserId = (userId: string) =>
   api.get(`/basket/user/${userId}`);
 
-export const createBasket = (userId: string, address: string, phone: string, fullName: string) =>
+export const createBasket = (
+  userId: string,
+  address: string,
+  phone: string,
+  fullName: string
+) =>
   api.post(`/basket/create/${userId}`, {
     address,
     phone,
@@ -23,12 +28,20 @@ export const updateGoodsOnBasket = (
     op,
   });
 
+export const updateBasketStatus = (basketId: string, status: string) =>
+  api.patch('/basket/update-status', {
+    basketId,
+    status,
+  });
+
+export const getAdminBasketList = () => api.get('/basket/get-to-admin');
+
 export const confirmBasket = (userId: string, body: any) =>
   api.post(`/basket/confirm/${userId}`, {
     ...body,
   });
 
-  export const delGoodsFromBasket = (userId: string, goodsId: string) =>
+export const delGoodsFromBasket = (userId: string, goodsId: string) =>
   api.patch(`/basket/delete-goods/${userId}`, {
     goodsId,
   });

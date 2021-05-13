@@ -38,7 +38,7 @@ const ROUTES: IRoutes[] = [
     path: "/admin-page",
     exact: false,
     componnent: <AdminPage />,
-    private: false,
+    private: true,
   },
   {
     path: "/cart",

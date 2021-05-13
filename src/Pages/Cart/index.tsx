@@ -13,7 +13,7 @@ import {
 import { getGoodsByIdArray } from '../../API/goods';
 import CartForm from '../../Components/CartForm';
 import { Button, List } from 'antd';
-import { Operation } from '../../utils/consts';
+import { Operation } from '../../utils/enums';
 import { AppContext } from '../../Context';
 
 import useStyles from './style';

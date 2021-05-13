@@ -8,7 +8,7 @@ import {
   getBasketByUserId,
   updateGoodsOnBasket,
 } from '../../API/basket';
-import { Operation } from '../../utils/consts';
+import { Operation } from '../../utils/enums';
 import { AppContext } from '../../Context';
 import CustomPagination from '../../Components/CustomPagination';
 

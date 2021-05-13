@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Button, Menu } from 'antd';
 import classNames from 'classnames';
 
-import { Type, FilterItems } from '../../utils/consts';
+import { Type, FilterItems } from '../../utils/enums';
 import TagItems from '../TagItems';
 
 import useStyles from './style';

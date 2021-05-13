@@ -4,7 +4,6 @@ const useStyles = createUseStyles({
   root: {
     display: 'flex',
     justifyContent: 'space-between',
-    minHeight: '100vh',
 
     '& .offer': {
       fontFamily: '"Playfair Display", serif',
