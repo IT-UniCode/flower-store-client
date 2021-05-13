@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button } from 'antd';
 
 import {
@@ -7,12 +7,13 @@ import {
   delBasketById,
 } from '../../API/basket';
 import { BasketStatus } from '../../utils/enums';
+import { AppContext } from '../../Context';
 
 import useStyles from './style';
 
 const AdminPage = () => {
   const classes = useStyles();
-
+  const { userContext } = useContext(AppContext);
   const [data, setData] = useState([
     {
       _id: '',
@@ -27,17 +28,23 @@ const AdminPage = () => {
   const changeStatus = async (basketId: string, status: string) => {
     const changedStatus = checkStatus(status)[1];
     const copyData = [...data];
-    const orderId = copyData.findIndex((item) => {
-      if (item._id === basketId) return true;
+    let orderId = -1;
+
+    copyData.forEach((item, index) => {
+      if (item._id === basketId) {
+        orderId = index;
+      }
     });
 
     if (status === BasketStatus.isdone) {
       delBasketById(basketId).catch((error) => console.log(`Error ${error}`));
       copyData.splice(orderId, 1);
     } else {
-      updateBasketStatus(basketId, changedStatus).catch((error) =>
-        console.log(`Error ${error}`)
-      );
+      updateBasketStatus(
+        basketId,
+        changedStatus,
+        userContext.email
+      ).catch((error) => console.log(`Error ${error}`));
       copyData[orderId].status = changedStatus;
     }
 
