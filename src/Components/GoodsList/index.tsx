@@ -87,11 +87,13 @@ const GoodsList: FC<GoodsListProps> = ({
                 src={item.goodsImage}
               />
             </div>
-            <DescPopover
-              title={item.name}
-              desc={item.description}
-              checkId={item._id}
-            />
+            <span className="popover">
+              <DescPopover
+                title={item.name}
+                desc={item.description}
+                checkId={item._id}
+              />
+            </span>
             <p className="goods_card-price">{item.price} ₴</p>
             <Button className="goods_card-btn" onClick={() => buy(item._id)}>
               Заказать

@@ -26,27 +26,22 @@ const AdminPage = () => {
 
   const changeStatus = async (basketId: string, status: string) => {
     const changedStatus = checkStatus(status)[1];
+    const copyData = [...data];
+    const orderId = copyData.findIndex((item) => {
+      if (item._id === basketId) return true;
+    });
+
     if (status === BasketStatus.isdone) {
-      await delBasketById(basketId)
-        .then(() => {
-          getAdminBasketList()
-            .then((res) => {
-              setData(res.data);
-            })
-            .catch((error) => console.log(`Error ${error}`));
-        })
-        .catch((error) => console.log(`Error ${error}`));
+      delBasketById(basketId).catch((error) => console.log(`Error ${error}`));
+      copyData.splice(orderId, 1);
     } else {
-      await updateBasketStatus(basketId, changedStatus)
-        .then(() => {
-          getAdminBasketList()
-            .then((res) => {
-              setData(res.data);
-            })
-            .catch((error) => console.log(`Error ${error}`));
-        })
-        .catch((error) => console.log(`Error ${error}`));
+      updateBasketStatus(basketId, changedStatus).catch((error) =>
+        console.log(`Error ${error}`)
+      );
+      copyData[orderId].status = changedStatus;
     }
+
+    setData(copyData);
   };
 
   const checkStatus = (status: string) => {
