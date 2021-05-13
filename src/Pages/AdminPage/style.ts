@@ -17,8 +17,12 @@ const useStyles = createUseStyles({
 
         '& td, th': {
           textAlign: 'center',
-          maxWidth: '200px',
           border: '1px solid #000',
+
+          '& .change-status_btn': {
+            width: '100%',
+            height: '100%'
+          }
         },
       },
     },

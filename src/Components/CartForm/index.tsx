@@ -1,8 +1,9 @@
 import React, { FC, useState, useContext } from 'react';
 import classNames from 'classnames';
-
-import { AppContext } from '../../Context';
 import { Input, Button, Result } from 'antd';
+
+import { BasketStatus } from '../../utils/enums';
+import { AppContext } from '../../Context';
 import { confirmBasket } from '../../API/basket';
 
 import useStyles from './style';
@@ -29,7 +30,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         price: data.price,
         orderDate: new Date(),
         email: userContext.email,
-        status: 'send',
+        status: BasketStatus.sended,
       }).then(() => {
         setUserContext({
           goodsCount: 0,
@@ -44,6 +45,14 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
           userLastName: userContext.userLastName,
         });
 
+        setData((prev) => ({
+          ...prev,
+          address: userContext.address,
+          goods: [],
+          price: 0,
+          comment: '',
+        }));
+
         setBasketStatus(true);
       });
     }
@@ -51,7 +60,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
 
   return (
     <form className={classes.root}>
-      <div>
+      <div className="order_inner-left">
         <label>Укажите телефон</label>
         <Input
           value={data.phone}
@@ -79,8 +88,11 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
           }
         />
       </div>
-      <div className="order_inner">
-        <p className="order_total-price">Общая стоимость {data.price} ₴</p>
+      <div className="order_inner-right">
+        <p className="order_total-price">
+          Общая стоимость: <br />
+          {data.price} ₴
+        </p>
         <Button
           className="order_btn"
           onClick={sendBasket}
@@ -88,7 +100,9 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
         >
           Оформить заказ
         </Button>
-        {basketStatus && <Result status="success" title="Заказ отправлен менеджеру" />}
+        {basketStatus && (
+          <Result status="success" title="Заказ отправлен менеджеру" />
+        )}
       </div>
     </form>
   );

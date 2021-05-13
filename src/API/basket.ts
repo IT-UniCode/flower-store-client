@@ -6,6 +6,8 @@ export const getBasketById = (basketId: string) =>
 export const getBasketByUserId = (userId: string) =>
   api.get(`/basket/user/${userId}`);
 
+export const getAdminBasketList = () => api.get('/basket/get-to-admin');
+
 export const createBasket = (
   userId: string,
   address: string,
@@ -34,8 +36,6 @@ export const updateBasketStatus = (basketId: string, status: string) =>
     status,
   });
 
-export const getAdminBasketList = () => api.get('/basket/get-to-admin');
-
 export const confirmBasket = (userId: string, body: any) =>
   api.post(`/basket/confirm/${userId}`, {
     ...body,
@@ -45,3 +45,6 @@ export const delGoodsFromBasket = (userId: string, goodsId: string) =>
   api.patch(`/basket/delete-goods/${userId}`, {
     goodsId,
   });
+
+export const delBasketById = (basketId: string) =>
+  api.delete(`/basket/del-by-id/${basketId}`)

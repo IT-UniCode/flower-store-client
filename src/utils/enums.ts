@@ -21,6 +21,7 @@ export enum FilterItems {
 export enum BasketStatus {
   created = 'created',
   sended = 'sended',
-  received = 'received',
+  accepted = 'accepted',
   staffed = 'staffed',
+  isdone = 'isdone',
 }

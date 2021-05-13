@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from 'antd';
 
-import { getAdminBasketList, updateBasketStatus } from '../../API/basket';
+import {
+  getAdminBasketList,
+  updateBasketStatus,
+  delBasketById,
+} from '../../API/basket';
 import { BasketStatus } from '../../utils/enums';
 
 import useStyles from './style';
@@ -19,10 +24,44 @@ const AdminPage = () => {
     },
   ]);
 
-  const changeStatus = (basketId: string, status: string) => {
-    updateBasketStatus(basketId, status)
-      .then((res) => {})
-      .catch((error) => console.log(`Error ${error}`));
+  const changeStatus = async (basketId: string, status: string) => {
+    const changedStatus = checkStatus(status)[1];
+    if (status === BasketStatus.isdone) {
+      await delBasketById(basketId)
+        .then(() => {
+          getAdminBasketList()
+            .then((res) => {
+              setData(res.data);
+            })
+            .catch((error) => console.log(`Error ${error}`));
+        })
+        .catch((error) => console.log(`Error ${error}`));
+    } else {
+      await updateBasketStatus(basketId, changedStatus)
+        .then(() => {
+          getAdminBasketList()
+            .then((res) => {
+              setData(res.data);
+            })
+            .catch((error) => console.log(`Error ${error}`));
+        })
+        .catch((error) => console.log(`Error ${error}`));
+    }
+  };
+
+  const checkStatus = (status: string) => {
+    switch (status) {
+      case BasketStatus.sended:
+        return ['Принять', BasketStatus.accepted];
+      case BasketStatus.accepted:
+        return ['Укомплетовать', BasketStatus.staffed];
+      case BasketStatus.staffed:
+        return ['Завершить', BasketStatus.isdone];
+      case BasketStatus.isdone:
+        return ['Удалить'];
+      default:
+        return [''];
+    }
   };
 
   useEffect(() => {
@@ -40,6 +79,7 @@ const AdminPage = () => {
         <table className="basket-list">
           <thead>
             <tr>
+              <th>№</th>
               <th>ФИО</th>
               <th>Телефон</th>
               <th>Адрес доставки</th>
@@ -51,29 +91,19 @@ const AdminPage = () => {
           <tbody>
             {data.map((item, index) => (
               <tr key={index}>
+                <td>{index + 1}</td>
                 <td>{item.fullName}</td>
                 <td>{item.phone}</td>
                 <td>{item.address}</td>
                 <td>{item.price}</td>
                 <td>{item.status}</td>
                 <td>
-                  {item.status === BasketStatus.sended ? (
-                    <button
-                      onClick={() =>
-                        changeStatus(item._id, BasketStatus.received)
-                      }
-                    >
-                      Принять
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() =>
-                        changeStatus(item._id, BasketStatus.staffed)
-                      }
-                    >
-                      Укомплетовать
-                    </button>
-                  )}
+                  <Button
+                    className="change-status_btn"
+                    onClick={() => changeStatus(item._id, item.status)}
+                  >
+                    {checkStatus(item.status)[0]}
+                  </Button>
                 </td>
               </tr>
             ))}
