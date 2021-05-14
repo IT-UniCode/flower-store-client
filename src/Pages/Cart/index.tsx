@@ -133,7 +133,12 @@ const Cart: FC = () => {
         setBasket(clientBasket);
       })
       .catch((error) => console.log(error));
-  }, [userContext.userId, userContext.address, userContext.phone]);
+  }, [
+    userContext.userId,
+    userContext.address,
+    userContext.phone,
+    basket.price,
+  ]);
 
   return (
     <div className={classes.root}>
