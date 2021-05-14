@@ -14,10 +14,13 @@ const useStyles = createUseStyles({
         borderCollapse: 'collapse',
         maxWidth: '1000px',
         width: '100%',
+        marginBottom: '30px',
 
         '& td, th': {
           textAlign: 'center',
           border: '1px solid #000',
+          padding: '5px 10px',
+          maxWidth: '200px',
 
           '& .change-status_btn': {
             width: '100%',

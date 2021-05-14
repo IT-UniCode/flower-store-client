@@ -30,11 +30,12 @@ export const updateGoodsOnBasket = (
     op,
   });
 
-export const updateBasketStatus = (basketId: string, status: string, email: string) =>
+export const updateBasketStatus = (basketId: string, status: string, email: string, orderDate: Date) =>
   api.patch('/basket/update-status', {
     basketId,
     status,
-    email
+    email,
+    orderDate,
   });
 
 export const confirmBasket = (userId: string, body: any) =>

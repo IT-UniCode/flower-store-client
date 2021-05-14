@@ -21,11 +21,16 @@ const AdminPage = () => {
       phone: '',
       address: '',
       price: '',
+      orderDate: '',
       status: '',
     },
   ]);
 
-  const changeStatus = async (basketId: string, status: string) => {
+  const changeStatus = async (
+    basketId: string,
+    status: string,
+    orderDate: Date
+  ) => {
     const changedStatus = checkStatus(status)[1];
     const copyData = [...data];
     let orderId = -1;
@@ -43,7 +48,8 @@ const AdminPage = () => {
       updateBasketStatus(
         basketId,
         changedStatus,
-        userContext.email
+        userContext.email,
+        orderDate
       ).catch((error) => console.log(`Error ${error}`));
       copyData[orderId].status = changedStatus;
     }
@@ -86,6 +92,7 @@ const AdminPage = () => {
               <th>Телефон</th>
               <th>Адрес доставки</th>
               <th>Сумма заказа</th>
+              <th>Дата</th>
               <th>Статус</th>
               <th />
             </tr>
@@ -98,11 +105,18 @@ const AdminPage = () => {
                 <td>{item.phone}</td>
                 <td>{item.address}</td>
                 <td>{item.price}</td>
+                <td>{new Date(item.orderDate).toLocaleDateString()}</td>
                 <td>{item.status}</td>
                 <td>
                   <Button
                     className="change-status_btn"
-                    onClick={() => changeStatus(item._id, item.status)}
+                    onClick={() =>
+                      changeStatus(
+                        item._id,
+                        item.status,
+                        new Date(item.orderDate)
+                      )
+                    }
                   >
                     {checkStatus(item.status)[0]}
                   </Button>
