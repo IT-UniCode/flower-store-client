@@ -5,7 +5,7 @@ const useStyles = createUseStyles({
     '& .page_title': {
       margin: '20px 0',
     },
-    
+
     '& .basket-list_wrapper': {
       display: 'flex',
       justifyContent: 'center',
@@ -23,9 +23,40 @@ const useStyles = createUseStyles({
           maxWidth: '200px',
 
           '& .change-status_btn': {
-            width: '100%',
-            height: '100%'
-          }
+            width: '150px',
+            height: '30px',
+            '&:hover': {
+              color: 'inherit',
+            }
+          },
+
+          '& .change-status_btn_sended': {
+            backgroundColor: '#1cc5dc',
+            '&:hover': {
+              borderColor: '#126e82'
+            }
+          },
+
+          '& .change-status_btn_accepted': {
+            backgroundColor: '#ffd56b',
+            '&:hover': {
+              borderColor: '#f58634'
+            }
+          },
+
+          '& .change-status_btn_staffed': {
+            backgroundColor: '#8fd9a8',
+            '&:hover': {
+              borderColor: '#28b5b5'
+            }
+          },
+
+          '& .change-status_btn_isdone': {
+            backgroundColor: '#fb3640',
+            '&:hover': {
+              borderColor: '#1b1717'
+            }
+          },
         },
       },
     },

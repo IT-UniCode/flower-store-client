@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { Button } from 'antd';
 
 import {
@@ -72,6 +73,15 @@ const AdminPage = () => {
     }
   };
 
+  const btn_classes = (status: string) => {
+    return classNames({
+      "change-status_btn change-status_btn_sended": status === BasketStatus.sended,
+      'change-status_btn change-status_btn_accepted': status === BasketStatus.accepted,
+      'change-status_btn change-status_btn_staffed': status === BasketStatus.staffed,
+      'change-status_btn change-status_btn_isdone': status === BasketStatus.isdone,
+    });
+  };
+
   useEffect(() => {
     getAdminBasketList()
       .then((res) => {
@@ -109,7 +119,7 @@ const AdminPage = () => {
                 <td>{item.status}</td>
                 <td>
                   <Button
-                    className="change-status_btn"
+                    className={btn_classes(item.status)}
                     onClick={() =>
                       changeStatus(
                         item._id,
