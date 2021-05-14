@@ -23,6 +23,7 @@ const Cart: FC = () => {
   const { userContext, setUserContext } = useContext(AppContext);
 
   const [basket, setBasket] = useState<IClientBasket>({
+    id: '',
     phone: userContext.phone,
     price: 0,
     comment: '',
@@ -113,31 +114,37 @@ const Cart: FC = () => {
 
   useEffect(() => {
     getBasketByUserId(userContext.userId)
-      .then(async (serverBasket) => {
-        const clientBasket: IClientBasket = {
-          phone: userContext.phone,
-          price: 0,
-          comment: '',
-          address: userContext.address,
-          orderDate: new Date(),
-          goods: [],
-        };
+      .then(async (serverBasket: { data: IServerBasket[] }) => {
+        if (serverBasket.data.length > 0) {
+          const clientBasket: IClientBasket = {
+            id: '',
+            phone: userContext.phone,
+            price: 0,
+            comment: '',
+            address: userContext.address,
+            orderDate: new Date(),
+            goods: [],
+          };
 
-        const { goodsArray, totalPrice } = await getGoods(serverBasket.data[0]);
+          const { goodsArray, totalPrice } = await getGoods(
+            serverBasket.data[0]
+          );
 
-        clientBasket.comment = serverBasket.data[0].comment;
-        clientBasket.orderDate = serverBasket.data[0].orderDate;
-        clientBasket.goods = goodsArray;
-        clientBasket.price = totalPrice;
+          clientBasket.id = serverBasket.data[0].id;
+          clientBasket.comment = serverBasket.data[0].comment;
+          clientBasket.orderDate = serverBasket.data[0].orderDate;
+          clientBasket.goods = goodsArray;
+          clientBasket.price = totalPrice;
 
-        setBasket(clientBasket);
+          setBasket(clientBasket);
+        }
       })
       .catch((error) => console.log(error));
   }, [
     userContext.userId,
     userContext.address,
     userContext.phone,
-    basket.price,
+    basket.goods.length,
   ]);
 
   return (

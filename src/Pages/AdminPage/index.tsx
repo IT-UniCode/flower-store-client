@@ -100,7 +100,7 @@ const AdminPage = () => {
           <tbody>
             {data.map((item, index) => (
               <tr key={index}>
-                <td>{index + 1}</td>
+                <td>{item._id}</td>
                 <td>{item.fullName}</td>
                 <td>{item.phone}</td>
                 <td>{item.address}</td>

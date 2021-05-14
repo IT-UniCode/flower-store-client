@@ -29,10 +29,32 @@ const GoodsList: FC<GoodsListProps> = ({
 
   const { userContext, setUserContext } = useContext(AppContext);
 
+  const setCount = (data: any) => {
+    let count = 1;
+
+    data.forEach((item: IBasketGoodsProps) => {
+      count += item.count;
+    });
+    setUserContext({
+      goodsCount: count,
+      phone: userContext.phone,
+      address: userContext.address,
+      role: userContext.role,
+      auth: userContext.auth,
+      email: userContext.email,
+      userId: userContext.userId,
+      userName: userContext.userName,
+      userSurName: userContext.userSurName,
+      userLastName: userContext.userLastName,
+    });
+  };
+
   const buy = (goodsId: string) => {
     if (userContext.auth) {
       getBasketByUserId(userContext.userId)
         .then((res) => {
+          if (res.data[0]) setCount(res.data[0].goods);
+
           if (res.data.length > 0) {
             updateGoodsOnBasket(
               userContext.userId,
@@ -57,19 +79,6 @@ const GoodsList: FC<GoodsListProps> = ({
           }
         })
         .catch((error) => console.log(error));
-
-      setUserContext({
-        goodsCount: userContext.goodsCount + 1,
-        phone: userContext.phone,
-        address: userContext.address,
-        role: userContext.role,
-        auth: userContext.auth,
-        email: userContext.email,
-        userId: userContext.userId,
-        userName: userContext.userName,
-        userSurName: userContext.userSurName,
-        userLastName: userContext.userLastName,
-      });
     } else {
       history.push('/signin');
     }

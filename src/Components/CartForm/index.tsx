@@ -23,6 +23,7 @@ const CartForm: FC<CartFormProps> = ({ data, setData }) => {
   const sendBasket = () => {
     if (data.address.length > 0) {
       confirmBasket(userContext.userId, {
+        id: data.id,
         fullName: `${userContext.userSurName} ${userContext.userName} ${userContext.userLastName}`,
         phone: data.phone,
         address: data.address,

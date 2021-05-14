@@ -26,12 +26,8 @@ declare interface ISelectedItems {
   tags: string;
 }
 
-declare interface IFilterItems {
-  type: string[];
-  tags: string[];
-}
-
 declare interface IClientBasket {
+  id: string;
   phone: string;
   price: number;
   comment: string;
@@ -46,6 +42,7 @@ declare interface IBasketGoodsProps {
 }
 
 declare interface IServerBasket {
+  id: string;
   price: number;
   comment: string;
   address: string;
