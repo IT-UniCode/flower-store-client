@@ -32,9 +32,11 @@ const GoodsList: FC<GoodsListProps> = ({
   const setCount = (data: any) => {
     let count = 1;
 
-    data.forEach((item: IBasketGoodsProps) => {
-      count += item.count;
-    });
+    if (data) {
+      data.forEach((item: IBasketGoodsProps) => {
+        count += item.count;
+      });
+    }
     setUserContext({
       goodsCount: count,
       phone: userContext.phone,
@@ -69,6 +71,8 @@ const GoodsList: FC<GoodsListProps> = ({
               `${userContext.userSurName} ${userContext.userName} ${userContext.userLastName}`
             )
               .then(() => {
+                setCount(res.data[0]?.goods);
+
                 updateGoodsOnBasket(
                   userContext.userId,
                   goodsId,

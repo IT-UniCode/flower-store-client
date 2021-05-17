@@ -25,37 +25,43 @@ const useStyles = createUseStyles({
           '& .change-status_btn': {
             width: '150px',
             height: '30px',
+
+            '&:focus': {
+              color: 'inherit',
+              borderColor: 'inherit',
+            },
+
             '&:hover': {
               color: 'inherit',
-            }
+            },
           },
 
           '& .change-status_btn_sended': {
             backgroundColor: '#1cc5dc',
             '&:hover': {
-              borderColor: '#126e82'
-            }
+              borderColor: '#126e82',
+            },
           },
 
           '& .change-status_btn_accepted': {
             backgroundColor: '#ffd56b',
             '&:hover': {
-              borderColor: '#f58634'
-            }
+              borderColor: '#f58634',
+            },
           },
 
           '& .change-status_btn_staffed': {
             backgroundColor: '#8fd9a8',
             '&:hover': {
-              borderColor: '#28b5b5'
-            }
+              borderColor: '#28b5b5',
+            },
           },
 
           '& .change-status_btn_isdone': {
             backgroundColor: '#fb3640',
             '&:hover': {
-              borderColor: '#1b1717'
-            }
+              borderColor: '#1b1717',
+            },
           },
         },
       },
